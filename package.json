@@ -1,0 +1,55 @@
+{
+  "name": "rhinox",
+  "description": "rhinox administrative software",
+  "version": "0.0.1",
+  "engines": {
+    "node": "12.x"
+  },
+  "scripts": {
+    "dev": "sapper dev",
+    "build": "run-s build:db build:sapper",
+    "build:sapper": "sapper build --legacy",
+    "build:db": "run-s 'migrate up' build:permissions.js",
+    "build:permissions.js": "node -r esm ./src/scripts/build_permissions_constants.js",
+    "export": "sapper export --legacy",
+    "start": "node __sapper__/build",
+    "create:permission": "node -r esm ./src/scripts/create_permission.js",
+    "create:crudPermissions": "node -r esm ./src/scripts/create_crudPermissions.js",
+    "migrate": "node-pg-migrate"
+  },
+  "dependencies": {
+    "argon2": "^0.27.0",
+    "body-parser": "^1.19.0",
+    "compose-middleware": "^5.0.1",
+    "connect-pg-simple": "^6.2.1",
+    "express-session": "^1.17.1",
+    "morgan": "^1.10.0",
+    "node-fetch": "^2.6.1",
+    "pg": "^8.4.1",
+    "polka": "next",
+    "sirv": "^1.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/runtime": "^7.0.0",
+    "@rollup/plugin-babel": "^5.0.0",
+    "@rollup/plugin-commonjs": "^14.0.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^8.0.0",
+    "@rollup/plugin-replace": "^2.2.0",
+    "@rollup/plugin-url": "^5.0.0",
+    "carbon-components-svelte": "^0.32.1",
+    "esm": "^3.2.25",
+    "node-pg-migrate": "^5.8.1",
+    "npm-run-all": "^4.1.5",
+    "rollup": "^2.3.4",
+    "rollup-plugin-svelte": "^6.0.0",
+    "rollup-plugin-terser": "^7.0.0",
+    "sapper": "^0.28.0",
+    "svelte": "^3.17.3",
+    "svelte-select": "^3.12.0"
+  }
+}
