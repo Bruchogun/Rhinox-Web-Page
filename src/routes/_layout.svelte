@@ -110,10 +110,11 @@
 
 			<SideNavMenu text="Gestión de usuarios">
 				<SideNavMenuItem href="signup" text="Crear usuario" />
-				<SideNavMenuItem href="ingreso_clients" text="Crear cliente" />
+				<SideNavMenuItem href="create_client" text="Crear cliente" />
 			</SideNavMenu>
 
 			<SideNavMenu text="Gestión monetaria">
+				<SideNavMenuItem href="create_general_expense" text="Gastos generales"/>
 				<SideNavMenuItem href="balances" text="Balance"/>
 			</SideNavMenu>
 
@@ -121,8 +122,8 @@
 				<SideNavMenuItem href="control_inv" text="Control de inventario"/>
 				<SideNavMenuItem href="reposicion_inv" text="Reposicion de Inventario"/>
 				<SideNavMenuItem href="ingreso_inv" text="Ingreso de inventario"/>
-				<SideNavMenuItem href="ingreso_storages" text="Registrar almacenes"/>
-				<SideNavMenuItem href="ingreso_suppliers" text="Registrar proveedores"/>
+				<SideNavMenuItem href="create_storage" text="Crear almacén"/>
+				<SideNavMenuItem href="create_suppliers" text="Registrar proveedor"/>
 			</SideNavMenu>
 			
 		{/if}
