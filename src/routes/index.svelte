@@ -1,8 +1,9 @@
 <script>
 	import 'carbon-components-svelte/css/white.css';
-	import Accounts from '../components/selects/Accounts.svelte';
-
-	let account;
+import Storages from '../components/selects/Storages.svelte';
+import Suppliers from '../components/selects/Suppliers.svelte';
 </script>
 
-<Accounts bind:account={account}/>
+<Storages/>
+
+<Suppliers/>

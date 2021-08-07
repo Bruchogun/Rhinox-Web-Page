@@ -45,6 +45,7 @@ exports.up = pgm => {
             mid_stock decimal(30,10) not null,
             max_stock decimal(30,10) not null,
             description varchar(500) not null,
+            manufacture varchar(1000) not null,
             created_at timestamp with time zone default current_timestamp
         );
 
@@ -52,6 +53,7 @@ exports.up = pgm => {
             id_item serial primary key,
             id_product int REFERENCES products (id_product) ON UPDATE CASCADE ON DELETE CASCADE,
             id_brand int REFERENCES brands (id_brand) ON UPDATE CASCADE ON DELETE CASCADE,
+            id_supplier int REFERENCES suppliers (id_supplier) ON UPDATE CASCADE ON DELETE CASCADE,
             cost decimal(30,10) not null,
             price decimal(30,10) not null,
             created_at timestamp with time zone default current_timestamp
@@ -100,7 +102,6 @@ exports.up = pgm => {
             quantity decimal(30,10) constraint positive_quantity check (quantity >= 0) not null,
             amount decimal(30,10) constraint positive_amount check (amount >= 0) not null,
             rate decimal(30,10) not null,
-            description varchar(500),
             created_at timestamp with time zone default current_timestamp
         );
 

@@ -1,6 +1,6 @@
 <script>
 	import 'carbon-components-svelte/css/white.css';
-	import { TextInput, Button, TextArea, FluidForm } from "carbon-components-svelte";
+	import { TextInput, Button, TextArea } from "carbon-components-svelte";
 	import { apiFetch } from '../functions';
 	import Accounts from '../components/selects/Accounts.svelte';
 	import Measures from '../components/selects/Measures.svelte';
