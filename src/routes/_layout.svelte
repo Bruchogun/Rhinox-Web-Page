@@ -116,6 +116,7 @@
 			<SideNavMenu text="Gestión monetaria">
 				<SideNavMenuItem href="create_general_expense" text="Gastos generales"/>
 				<SideNavMenuItem href="create_account" text="Crear cuenta bancaria"/>
+				<SideNavMenuItem href="wire_transfer" text="Transferencias"/>
 				<SideNavMenuItem href="balances" text="Balance"/>
 			</SideNavMenu>
 
@@ -123,7 +124,6 @@
 				<SideNavMenuItem href="inventory" text="Control de inventario"/>
 				<SideNavMenuItem href="inventory_replacement" text="Reposicion de Inventario"/>
 				<SideNavMenuItem href="create_item" text="Ingreso de inventario"/>
-				<SideNavMenuItem href="create_storage" text="Crear almacén"/>
 				<SideNavMenuItem href="create_suppliers" text="Registrar proveedor"/>
 			</SideNavMenu>
 			

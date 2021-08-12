@@ -1,16 +1,6 @@
 exports.up = pgm => {
     pgm.sql`
 
-
-
-        create table storages(
-            id_storage serial primary key,
-            name varchar(100) unique not null,            
-            description varchar(500) not null,
-            location varchar(400) not null,
-            created_at timestamp with time zone default current_timestamp
-        );
-
         create table measures(
             id_measure serial primary key,
             name varchar(50) unique not null,
@@ -63,16 +53,9 @@ exports.up = pgm => {
             id_supplier int REFERENCES suppliers (id_supplier) ON UPDATE CASCADE ON DELETE CASCADE,
             cost decimal(30,10) not null,
             price decimal(30,10) not null,
-            created_at timestamp with time zone default current_timestamp
-        );
-
-        create table stocks(
-            id_stock serial primary key,
-            id_item int REFERENCES items (id_item) ON UPDATE CASCADE ON DELETE CASCADE,
-            id_storage int REFERENCES storages (id_storage) ON UPDATE CASCADE ON DELETE CASCADE,
             quantity decimal(30,10) default 0 constraint positive_quantity check (quantity >= 0) not null,
             created_at timestamp with time zone default current_timestamp,
-            unique (id_item, id_storage)
+            unique (id_product, id_brand)
         );
 
         create table currencys(
@@ -93,18 +76,17 @@ exports.up = pgm => {
 
         create table inv_expenses(
             id_inv_expense serial primary key,
-            id_stock int REFERENCES stocks (id_stock) ON UPDATE CASCADE ON DELETE CASCADE,
+            id_item int REFERENCES items (id_item) ON UPDATE CASCADE ON DELETE CASCADE,
             id_account int REFERENCES accounts (id_account) ON UPDATE CASCADE  ON DELETE CASCADE,
             quantity decimal(30,10) constraint positive_quantity check (quantity >= 0) not null,
             amount decimal(30,10) constraint positive_amount check (amount >= 0) not null,
             rate decimal(30,10) not null,
-            description varchar(500) not null,
             created_at timestamp with time zone default current_timestamp
         );
 
         create table inv_incomes(
             id_inv_income serial primary key,
-            id_stock int REFERENCES stocks (id_stock) ON UPDATE CASCADE  ON DELETE CASCADE,
+            id_item int REFERENCES items (id_item) ON UPDATE CASCADE ON DELETE CASCADE,
             id_account int REFERENCES accounts (id_account) ON UPDATE CASCADE  ON DELETE CASCADE,
             quantity decimal(30,10) constraint positive_quantity check (quantity >= 0) not null,
             amount decimal(30,10) constraint positive_amount check (amount >= 0) not null,
@@ -154,7 +136,7 @@ exports.up = pgm => {
             created_at timestamp with time zone default current_timestamp
         );
 
-        create type movement_category as ENUM ('inv_expenses', 'inv_incomes', 'general_expenses');
+        create type movement_category as ENUM ('inv_expenses', 'inv_incomes', 'general_expenses', 'wire_transfers');
         
         create table balance_movements(
             id_balance_movement serial primary key,
@@ -176,6 +158,12 @@ exports.up = pgm => {
         create table join_combos_items(
             id_combo int REFERENCES combos (id_combo) ON UPDATE CASCADE  ON DELETE CASCADE,
             id_item int REFERENCES items (id_item) ON UPDATE CASCADE  ON DELETE CASCADE,
+            created_at timestamp with time zone default current_timestamp
+        );
+
+        create table wire_transfers(
+            id_wire_transfer serial primary key,
+            description varchar(500) not null,
             created_at timestamp with time zone default current_timestamp
         );
 -----------------------------------------------------------DATA----------------------------------------------------------------
@@ -222,6 +210,9 @@ exports.down = pgm => {
         ALTER SEQUENCE IF EXISTS balances_id_balance_seq RESTART WITH 1;
         ALTER TABLE IF EXISTS users DROP special_user;
          
+        DROP TABLE IF EXISTS wire_transfers;
+        DROP TABLE IF EXISTS join_combos_items;
+        DROP TABLE IF EXISTS combos;
         DROP TABLE IF EXISTS balance_movements;
         DROP TABLE IF EXISTS balances;
         DROP TYPE IF EXISTS movement_category;
@@ -232,13 +223,11 @@ exports.down = pgm => {
         DROP TABLE IF EXISTS inv_expenses;
         DROP TABLE IF EXISTS accounts;
         DROP TABLE IF EXISTS currencys;
-        DROP TABLE IF EXISTS stocks;
         DROP TABLE IF EXISTS items;
         DROP TABLE IF EXISTS products;
         DROP TABLE IF EXISTS supplier_addresses;
         DROP TABLE IF EXISTS suppliers;
         DROP TABLE IF EXISTS brands;
         DROP TABLE IF EXISTS measures;
-        DROP TABLE IF EXISTS storages;
         ` 
 };

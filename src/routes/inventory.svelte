@@ -3,9 +3,6 @@
 	import { onMount } from 'svelte';
     import { DataTable } from "carbon-components-svelte";
 	import { apiFetch } from '../functions';
-	import Storages from '../components/selects/Storages.svelte';
-
-	let storage;
 
 		const headers = [
 			{ key: 'code', value: 'Código' }, 
@@ -44,10 +41,9 @@
 
 	let rows= [];
 	let itemsToList = [];
-	$: if (items && storage) {
+	$: if (items) {
 		let all_items=items.stocks;
-		const items_filtered = all_items.filter(({id_storage}) => id_storage === storage.value);
-		itemsToList = items_filtered.map(( item ) => {
+		itemsToList = all_items.map(( item ) => {
 			return ({id: item.id_stock,
 					code: item.products_code,
 					description: item.description,
@@ -105,8 +101,6 @@
 		background-color: rgb(0, 255, 0);
 	}
 </style>
-
-	<Storages bind:storage={storage} />
 
 	{#if rows.length!=0}
 		<h5>
