@@ -32,7 +32,14 @@ exports.up = pgm => {
             phone_number3 varchar(30),
             phone_number4 varchar(30),
             email varchar(100),
-            address varchar(400),
+            description varchar(500),
+            created_at timestamp with time zone default current_timestamp
+        );
+
+        create table supplier_addresses(
+            id_supplier_address serial primary key,
+            id_supplier int REFERENCES suppliers (id_supplier) ON UPDATE CASCADE ON DELETE CASCADE,
+            address varchar(100) not null,
             description varchar(500),
             created_at timestamp with time zone default current_timestamp
         );
@@ -106,7 +113,7 @@ exports.up = pgm => {
         );
 
         create table clients(
-            id_clients serial primary key,
+            id_client serial primary key,
             name varchar(100) not null,
             last_name varchar(100),
             phone_number1 varchar(30),
@@ -114,15 +121,20 @@ exports.up = pgm => {
             phone_number3 varchar(30),
             phone_number4 varchar(30),
             email varchar(100),
-            address varchar(400),
+            description varchar(500),
+            created_at timestamp with time zone default current_timestamp
+        );
+        
+        create table client_addresses(
+            id_client_address serial primary key,
+            id_client int REFERENCES clients (id_client) ON UPDATE CASCADE ON DELETE CASCADE,
+            address varchar(100) not null,
             description varchar(500),
             created_at timestamp with time zone default current_timestamp
         );
 
         alter table users
             add special_user boolean default FALSE not null;
-
-
 
         create table general_expenses(
             id_general_expense serial primary key,
@@ -150,6 +162,20 @@ exports.up = pgm => {
             id_movement_category integer not null,
             type_movement_category movement_category not null,
             amount decimal(30,10) not null,
+            created_at timestamp with time zone default current_timestamp
+        );
+
+        create table combos(
+            id_combo serial primary key,
+            name varchar(100) not null,
+            description varchar(2000) not null,
+            manufacture varchar(2000) not null,
+            created_at timestamp with time zone default current_timestamp
+        );
+
+        create table join_combos_items(
+            id_combo int REFERENCES combos (id_combo) ON UPDATE CASCADE  ON DELETE CASCADE,
+            id_item int REFERENCES items (id_item) ON UPDATE CASCADE  ON DELETE CASCADE,
             created_at timestamp with time zone default current_timestamp
         );
 -----------------------------------------------------------DATA----------------------------------------------------------------
@@ -200,6 +226,7 @@ exports.down = pgm => {
         DROP TABLE IF EXISTS balances;
         DROP TYPE IF EXISTS movement_category;
         DROP TABLE IF EXISTS general_expenses;
+        DROP TABLE IF EXISTS client_addresses;
         DROP TABLE IF EXISTS clients;
         DROP TABLE IF EXISTS inv_incomes;
         DROP TABLE IF EXISTS inv_expenses;
@@ -208,6 +235,7 @@ exports.down = pgm => {
         DROP TABLE IF EXISTS stocks;
         DROP TABLE IF EXISTS items;
         DROP TABLE IF EXISTS products;
+        DROP TABLE IF EXISTS supplier_addresses;
         DROP TABLE IF EXISTS suppliers;
         DROP TABLE IF EXISTS brands;
         DROP TABLE IF EXISTS measures;

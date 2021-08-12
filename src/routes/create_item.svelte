@@ -1,6 +1,6 @@
 <script>
 	import 'carbon-components-svelte/css/white.css';
-	import { TextInput, Button, TextArea } from "carbon-components-svelte";
+	import { TextInput, Button, TextArea, FluidForm } from "carbon-components-svelte";
 	import Measures from '../components/selects/Measures.svelte';
 	import Storages from '../components/selects/Storages.svelte';
 	import Suppliers from '../components/selects/Suppliers.svelte';
@@ -59,6 +59,8 @@
 	}
 </script>
 
+<FluidForm on:submit={add_item}>
+
 <Products bind:product={code} />
 
 <Brands bind:brand={brand} />
@@ -83,4 +85,6 @@
 
 <TextArea labelText="Detalles de fabricación" placeholder="Ingrese los detalles de fabricación..." bind:value={manufacture}/>
 
-<Button on:click={add_item}>Enviar</Button>
+<Button type=submit >Enviar</Button>
+
+</FluidForm>

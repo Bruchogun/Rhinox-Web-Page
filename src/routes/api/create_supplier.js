@@ -11,16 +11,25 @@ export const post = compose(
 
         const {rows: supplier} = await sql`
 
-            INSERT INTO suppliers
-            (name, phone_number1, phone_number2, phone_number3, phone_number4, email, address, description)
-            VALUES (${name}:: character varying,
-                    ${phone_number1}:: character varying,
-                    ${phone_number2}:: character varying,
-                    ${phone_number3}:: character varying,
-                    ${phone_number4}:: character varying,
-                    ${email}:: character varying,
-                    ${address}:: character varying,
-                    ${description}:: character varying);
+            WITH new_supplier as (
+                INSERT INTO suppliers
+                (name, phone_number1, phone_number2, phone_number3, phone_number4, email, description)
+                VALUES (${name}:: character varying,
+                        ${phone_number1}:: character varying,
+                        ${phone_number2}:: character varying,
+                        ${phone_number3}:: character varying,
+                        ${phone_number4}:: character varying,
+                        ${email}:: character varying,
+                        ${description}:: character varying)
+                        RETURNING id_supplier
+            )
+                INSERT INTO supplier_addresses
+                    (id_supplier, address, description)
+                    SELECT
+                        new_supplier.id_supplier,
+                        ${address.address},
+                        ${address.description}
+                    FROM new_supplier;
                     
             `;
 

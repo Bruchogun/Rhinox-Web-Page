@@ -1,9 +1,8 @@
 <script>
 	import 'carbon-components-svelte/css/white.css';
-import Storages from '../components/selects/Storages.svelte';
-import Suppliers from '../components/selects/Suppliers.svelte';
+	import ClientAddresses from '../components/selects/ClientAddresses.svelte';
+	let address;
+	$:console.log(address)
 </script>
 
-<Storages/>
-
-<Suppliers/>
+<ClientAddresses bind:address={address}/>

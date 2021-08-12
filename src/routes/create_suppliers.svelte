@@ -2,6 +2,7 @@
 	import 'carbon-components-svelte/css/white.css';
 	import { FluidForm, TextInput, Button, TextArea } from "carbon-components-svelte";
 	import { apiFetch } from '../functions';
+import SupplierAddresses from '../components/selects/SupplierAddresses.svelte';
 
 let name;
 let phone_number1;
@@ -13,6 +14,9 @@ let address;
 let description;
 
 	async function create_supplier(){
+		if(!address.address){
+			address.address = address.value;
+		}
 		await apiFetch ('/api/create_supplier', {
                 method: 'POST',
                 body: JSON.stringify({
@@ -23,7 +27,8 @@ let description;
 					phone_number4,
 					email,
 					address,
-					description
+					description,
+					address
                 }),
                 headers: {'Content-Type': 'application/json'}
             })
@@ -33,7 +38,7 @@ let description;
 			phone_number3 = null;
 			phone_number4 = null;
 			email = null;
-			address = "";
+			address = null;
 			description = "";
 	}
 </script>
@@ -51,9 +56,15 @@ let description;
 
 	<TextInput labelText="Correo electrónico" placeholder="Ingrese un email..." bind:value={email}/>
 
-	<TextArea labelText="Dirección" placeholder="Ingrese la dirección" bind:value={address}/>
-
 	<TextArea labelText="Descripción" placeholder="Ingrese la descripción" bind:value={description}/>
 
+	<SupplierAddresses bind:address={address}/>
+
+	{#if address && address.value === address.label}
+	
+		<TextArea labelText="Puntos de referencia" placeholder="Ingrese la puntos de referencia / indicaciones extras" bind:value={address.description}/>
+
+	{/if}
+	
 	<Button type=submit >Registrar proveedor</Button>
 </FluidForm>

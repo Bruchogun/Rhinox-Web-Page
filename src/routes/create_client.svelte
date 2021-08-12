@@ -2,6 +2,7 @@
 	import 'carbon-components-svelte/css/white.css';
 	import { FluidForm, TextInput, Button, TextArea } from "carbon-components-svelte";
 	import { apiFetch } from '../functions';
+import ClientAddresses from '../components/selects/ClientAddresses.svelte';
 
 	let name;
 	let last_name;
@@ -10,10 +11,13 @@
 	let number3;
 	let number4;
 	let email;
-	let address;
 	let description;
+	let address;
 
 	async function create_client(){
+		if(!address.address){
+			address.address = address.value;
+		}
 		await apiFetch ('/api/create_client', {
                 method: 'POST',
                 body: JSON.stringify({
@@ -24,8 +28,8 @@
 					number3,
 					number4,
 					email,
-					address,
-					description
+					description,
+					address
                 }),
                 headers: {'Content-Type': 'application/json'}
             })
@@ -36,9 +40,10 @@
 			number3 = null;
 			number4 = null;
 			email = null;
-			address = "";
 			description = "";
+			address = "";
 	}
+
 </script>
 
 <FluidForm on:submit={create_client}>
@@ -56,9 +61,15 @@
 
 	<TextInput labelText="Correo electrónico" placeholder="Ingrese un email..." bind:value={email}/>
 
-	<TextArea labelText="Dirección" placeholder="Ingrese la dirección" bind:value={address}/>
-
 	<TextArea labelText="Descripción" placeholder="Ingrese la descripción" bind:value={description}/>
+
+	<ClientAddresses bind:address={address}/>
+
+	{#if address && address.value === address.label}
+	
+		<TextArea labelText="Puntos de referencia" placeholder="Ingrese la puntos de referencia / indicaciones extras" bind:value={address.description}/>
+	
+	{/if}
 
 	<Button type=submit >Crear cliente</Button>
 </FluidForm>
