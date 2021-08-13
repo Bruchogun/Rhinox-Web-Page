@@ -117,6 +117,7 @@
 				<SideNavMenuItem href="create_general_expense" text="Gastos generales"/>
 				<SideNavMenuItem href="create_account" text="Crear cuenta bancaria"/>
 				<SideNavMenuItem href="wire_transfer" text="Transferencias"/>
+				<SideNavMenuItem href="exchange_currency" text="Cambio de moneda"/>
 				<SideNavMenuItem href="balances" text="Balance"/>
 			</SideNavMenu>
 

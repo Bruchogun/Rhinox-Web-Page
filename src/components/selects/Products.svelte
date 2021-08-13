@@ -17,8 +17,8 @@
 	})
 
 	$: if (products.length > 0) {
-		productsToList = products.map(({ code }) => {
-			return ({value: code, label: code})
+		productsToList = products.map(( product ) => {
+			return ({...product, value: product.code, label: product.code})
 		})
 	}
 </script>

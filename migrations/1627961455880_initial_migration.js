@@ -38,9 +38,6 @@ exports.up = pgm => {
             id_product serial primary key,
             id_measure int REFERENCES measures (id_measure) ON UPDATE CASCADE ON DELETE CASCADE,
             code varchar(100) unique not null,
-            min_stock decimal(30,10) not null,
-            mid_stock decimal(30,10) not null,
-            max_stock decimal(30,10) not null,
             description varchar(500) not null,
             manufacture varchar(1000) not null,
             created_at timestamp with time zone default current_timestamp
@@ -53,6 +50,9 @@ exports.up = pgm => {
             id_supplier int REFERENCES suppliers (id_supplier) ON UPDATE CASCADE ON DELETE CASCADE,
             cost decimal(30,10) not null,
             price decimal(30,10) not null,
+            min_stock decimal(30,10) not null,
+            mid_stock decimal(30,10) not null,
+            max_stock decimal(30,10) not null,
             quantity decimal(30,10) default 0 constraint positive_quantity check (quantity >= 0) not null,
             created_at timestamp with time zone default current_timestamp,
             unique (id_product, id_brand)
@@ -136,7 +136,7 @@ exports.up = pgm => {
             created_at timestamp with time zone default current_timestamp
         );
 
-        create type movement_category as ENUM ('inv_expenses', 'inv_incomes', 'general_expenses', 'wire_transfers');
+        create type movement_category as ENUM ('inv_expenses', 'inv_incomes', 'general_expenses', 'wire_transfers', 'exchange_currencys');
         
         create table balance_movements(
             id_balance_movement serial primary key,
@@ -166,6 +166,12 @@ exports.up = pgm => {
             description varchar(500) not null,
             created_at timestamp with time zone default current_timestamp
         );
+
+        create table exchange_currencys(
+            id_exchange_currency serial primary key,
+            description varchar(500) not null,
+            created_at timestamp with time zone default current_timestamp
+        );
 -----------------------------------------------------------DATA----------------------------------------------------------------
 
         INSERT INTO public.measures 
@@ -181,7 +187,10 @@ exports.up = pgm => {
 
         INSERT INTO public.currencys 
             ( name_singular, name_plural, symbol, code ) 
-            VALUES ( 'peso'::character varying, 'pesos'::character varying, 'COP'::character varying, 'cop'::character varying );
+            VALUES ( 'peso'::character varying, 'pesos'::character varying, 'COP'::character varying, 'cop'::character varying ),
+                   ( 'dólar'::character varying, 'dólares'::character varying, '$'::character varying, 'usd'::character varying ),
+                   ( 'euro'::character varying, 'euros'::character varying, '€'::character varying, 'eur'::character varying ),
+                   ( 'bitcoin'::character varying, 'bitcoins'::character varying, '₿'::character varying, 'btc'::character varying );
 
         INSERT INTO public.accounts 
             ( id_currency, name ) 
@@ -210,6 +219,7 @@ exports.down = pgm => {
         ALTER SEQUENCE IF EXISTS balances_id_balance_seq RESTART WITH 1;
         ALTER TABLE IF EXISTS users DROP special_user;
          
+        DROP TABLE IF EXISTS exchange_currencys;
         DROP TABLE IF EXISTS wire_transfers;
         DROP TABLE IF EXISTS join_combos_items;
         DROP TABLE IF EXISTS combos;

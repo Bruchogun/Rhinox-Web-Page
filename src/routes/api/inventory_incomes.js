@@ -7,19 +7,19 @@ import checkPermissionsMW from "../../middlewares/checkPermissionsMW";
 export const post = compose(
     checkPermissionsMW(ROLES_CREATE),
     async (req, res) => {
-        const { id_stock, id_account, amount, cost, currency_code } = req.body;
+        const { id_item, id_account, quantity, cost, currency_code } = req.body;
         const rate = await getRate("usd", currency_code)
         const {rows: result} = await sql`
 
                 WITH _t as (
-                    UPDATE stocks
-                    SET quantity = quantity + ${amount}
-                    WHERE id_stock = ${id_stock}
+                    UPDATE items
+                    SET quantity = quantity + ${quantity}
+                    WHERE id_item = ${id_item}
     
                 ), new_inv_income as(
                     INSERT INTO public.inv_incomes
-                        ( id_stock, id_account, quantity, amount, rate )
-                        VALUES (${id_stock}::integer, ${id_account}::integer, ${amount}::numeric, ${cost}::numeric, ${rate}::numeric)
+                        ( id_item, id_account, quantity, amount, rate )
+                        VALUES (${id_item}::integer, ${id_account}::integer, ${quantity}::numeric, ${cost}::numeric, ${rate}::numeric)
                         RETURNING id_inv_income
                 )
     

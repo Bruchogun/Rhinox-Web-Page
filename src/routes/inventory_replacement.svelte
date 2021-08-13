@@ -7,16 +7,16 @@
 
 	let item;
     let account;
-    let amount;
+    let quantity;
     let cost;
 
 	async function repalce_inv(){
 		await apiFetch("/api/inventory_incomes",{
 			method: 'POST',
 			body: JSON.stringify({
-				id_stock: item.id,
+				id_item: item.id_item,
 				id_account: account.id_account,
-				amount,
+				quantity,
 				cost,
 				currency_code: account.code
 			}),headers: {'Content-Type': 'application/json'}
@@ -27,7 +27,7 @@
 	function cleanWindows(){
 		item=null
 		account=null
-		amount=null
+		quantity=null
 		cost=null
 	}
 
@@ -35,7 +35,7 @@
 
 <Items bind:item={item}/>
 
-<TextInput type="Number" labelText="Cantidad repuesta" placeholder="Ingrese la cantidad repuesta..." bind:value={amount}/>
+<TextInput type="Number" labelText="Cantidad repuesta" placeholder="Ingrese la cantidad repuesta..." bind:value={quantity}/>
 
 <Accounts orientation="vertical" bind:account={account}/>
 

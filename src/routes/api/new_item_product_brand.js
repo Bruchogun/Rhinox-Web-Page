@@ -6,13 +6,21 @@ import checkPermissionsMW from "../../middlewares/checkPermissionsMW";
 export const post = compose(
     checkPermissionsMW(ROLES_CREATE),
     async (req, res) => {
-        const { code, description, brand , cost, price, storage, measure, min_stock, mid_stock, max_stock, supplier, manufacture} = req.body;
+        const { code, brand, id_supplier, id_measure, cost, price, min_stock, mid_stock, max_stock, description, manufacture} = req.body;
+        if(cost >= price) return res.json({error: "El costo debe ser menor que el precio de venta."})
+        if(min_stock > max_stock || min_stock > mid_stock) return res.json({error: "La 'cantidad mínima de stock' debe ser la menor."})
+        if(mid_stock > max_stock || mid_stock < min_stock) return res.json({error: "La 'cantidad media de stock' debe ser la intermedia."})
+        if(max_stock < mid_stock || max_stock < min_stock) return res.json({error: "La 'cantidad máxima de stock' debe ser la mayor."})
+
         const {rows: items} = await sql`
 
             WITH new_product as (
                 INSERT INTO public.products
-                    (code, description, id_measure, min_stock, mid_stock, max_stock, manufacture)
-                    VALUES (${code}::character varying, ${description}::character varying, ${measure}::integer, ${min_stock}::numeric, ${mid_stock}::numeric, ${max_stock}::numeric, ${manufacture}::character varying)
+                    (id_measure, code, description, manufacture)
+                    VALUES (${id_measure}::integer, 
+                            ${code}::character varying, 
+                            ${description}::character varying, 
+                            ${manufacture}::character varying)
                     ON CONFLICT(code) DO NOTHING
                     RETURNING id_product
             ), new_brand as (
@@ -21,15 +29,18 @@ export const post = compose(
                     VALUES (${brand}::character varying)
                     ON CONFLICT(name) DO NOTHING
                     RETURNING id_brand
-            ), new_item as (
+            )
                 INSERT INTO public.items
-                    ( id_brand, id_product, cost, price, id_supplier )
+                    ( id_brand, id_product, cost, price, min_stock, mid_stock, max_stock, id_supplier )
                     SELECT
                         brand.id_brand,
                         product.id_product,
                         ${cost}::numeric,
                         ${price}::numeric,
-                        ${supplier}::integer
+                        ${min_stock}::numeric, 
+                        ${mid_stock}::numeric, 
+                        ${max_stock}::numeric, 
+                        ${id_supplier}::integer
                     FROM
                         (
                             SELECT COALESCE(
@@ -44,20 +55,12 @@ export const post = compose(
                             ) AS id_brand
                         ) AS brand
                     LIMIT 1
-                    RETURNING id_item
-            )
-            INSERT INTO public.stocks
-                ( id_item, id_storage )
-                SELECT id_item, ${storage}
-                FROM new_item
-                RETURNING id_stock;
+                    RETURNING id_item;
 
             `; 
-            //[ code, description, brand , cost, price, storage, measure, min_stock, mid_stock, max_stock, supplier]
-        let data = items[0]
         res.json({
             success:"Artículo ingresado al inventario",
-            data
+            items
         });
     }
 )

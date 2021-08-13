@@ -11,7 +11,7 @@
 			{ key: 'supplier', value: 'Proveedor' },
 			{ key: 'price_cost', value: 'Precio Compra' },
 			{ key: 'price_sell', value: 'Precio Venta' },
-			{ key: 'amount', value: 'Stock' },
+			{ key: 'quantity', value: 'Stock' },
 			{ key: 'min_stock', value: 'Stock minimo' },
 			{ key: 'mid_stock', value: 'Stock medio' },
 			{ key: 'max_stock', value: 'Stock máximo' },
@@ -20,7 +20,7 @@
 	
     let items;
 	onMount(async ()=>{
-		 items = await apiFetch('/api/items');
+		 ({items} = await apiFetch('/api/items'));
 	})
 
 	function status(min, mid, max, stock){
@@ -42,22 +42,21 @@
 	let rows= [];
 	let itemsToList = [];
 	$: if (items) {
-		let all_items=items.stocks;
-		itemsToList = all_items.map(( item ) => {
-			return ({id: item.id_stock,
-					code: item.products_code,
+		itemsToList = items.map(item => {
+			return ({id: item.id_item,
+					code: item.product_code,
 					description: item.description,
 					manufacture: item.manufacture,
 					supplier: item.supplier,
-					amount: `${Number(item.stocks_quantity).toFixed(2)} ${item.unit}`,
+					quantity: `${Number(item.quantity).toFixed(2)} ${item.unit}`,
                     price_sell: `$ ${Number(item.price).toFixed(2)}`,
                     price_cost: `$ ${Number(item.cost).toFixed(2)}`,
                     min_stock: `${Number(item.min_stock).toFixed(2)} ${item.unit}`,
                     mid_stock: `${Number(item.mid_stock).toFixed(2)} ${item.unit}`,
                     max_stock: `${Number(item.max_stock).toFixed(2)} ${item.unit}`,
-                    status: `${status(Number(item.min_stock), Number(item.mid_stock), Number(item.max_stock), Number(item.stocks_quantity))}`
+                    status: `${status(Number(item.min_stock), Number(item.mid_stock), Number(item.max_stock), Number(item.quantity))}`
 					})
-		})
+		});
 	}
 
 	$: if (items) {

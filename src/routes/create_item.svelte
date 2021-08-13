@@ -2,7 +2,6 @@
 	import 'carbon-components-svelte/css/white.css';
 	import { TextInput, Button, TextArea, FluidForm } from "carbon-components-svelte";
 	import Measures from '../components/selects/Measures.svelte';
-	import Storages from '../components/selects/Storages.svelte';
 	import Suppliers from '../components/selects/Suppliers.svelte';
 	import Brands from '../components/selects/Brands.svelte';
 	import Products from '../components/selects/Products.svelte';
@@ -15,21 +14,30 @@
 	let manufacture;
 	let brand;
 	let supplier;
-	let code;
+	let product;
 	let cost;
 	let price;
 	let measure;
-	let storage;
 
 	async function add_item(){
+		let id_measure;
+		if(!measure){
+			id_measure = product.id_measure;
+		}else{
+			id_measure = measure.value;
+		}
+
+		if(!description || !manufacture){
+			description = "XD";
+			manufacture = "XD";
+		}
 		await apiFetch("/api/new_item_product_brand",{
 			method: 'POST',
 			body: JSON.stringify({
-				code: code.value,
-				brand: brand.value,
-				supplier: supplier.value,
-				measure: measure.value,
-				storage: storage.value,
+				code: product.value,
+				brand: brand.label,
+				id_supplier: supplier.value,
+				id_measure,
 				cost,
 				price,
 				min_stock: min,
@@ -44,32 +52,38 @@
 	}
 
 	function cleanWindows(){
-		description=""
-		manufacture=""
+		description="";
+		manufacture="";
 		brand=null
 		supplier=null
-		code=null
+		product=null
 		cost=null
 		price=null
 		measure=null
-		storage=null
 		min=null
 		mid=null
 		top=null
 	}
+
+	$: console.log(product);
+	$: console.log(brand);
+	$: console.log(supplier);
+	$: console.log(measure);
 </script>
 
 <FluidForm on:submit={add_item}>
 
-<Products bind:product={code} />
+<Products bind:product={product} />
 
 <Brands bind:brand={brand} />
 
 <Suppliers bind:supplier={supplier} />
 
+{#if product && !product.id_product}
+
 <Measures bind:measure={measure} />
 
-<Storages bind:storage={storage} />
+{/if}
 
 <TextInput type="Number" labelText="Costo" placeholder="Ingrese el monto..." bind:value={cost}/>
 
@@ -81,9 +95,13 @@
 
 <TextInput type="Number" labelText="Cantidad máxima de stock" placeholder="Ingrese el monto..." bind:value={top}/>
 
+{#if product && !product.id_product}
+
 <TextArea labelText="Descripción" placeholder="Ingrese la descripción del artículo..." bind:value={description}/>
 
 <TextArea labelText="Detalles de fabricación" placeholder="Ingrese los detalles de fabricación..." bind:value={manufacture}/>
+
+{/if}
 
 <Button type=submit >Enviar</Button>
 
