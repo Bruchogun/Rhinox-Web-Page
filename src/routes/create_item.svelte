@@ -28,8 +28,8 @@
 		}
 
 		if(!description || !manufacture){
-			description = "XD";
-			manufacture = "XD";
+			description = "None";
+			manufacture = "None";
 		}
 		await apiFetch("/api/new_item_product_brand",{
 			method: 'POST',

@@ -8,9 +8,10 @@ export const post = compose(
     async (req, res) => {
         const { code, brand, id_supplier, id_measure, cost, price, min_stock, mid_stock, max_stock, description, manufacture} = req.body;
         if(cost >= price) return res.json({error: "El costo debe ser menor que el precio de venta."})
-        if(min_stock > max_stock || min_stock > mid_stock) return res.json({error: "La 'cantidad mínima de stock' debe ser la menor."})
-        if(mid_stock > max_stock || mid_stock < min_stock) return res.json({error: "La 'cantidad media de stock' debe ser la intermedia."})
-        if(max_stock < mid_stock || max_stock < min_stock) return res.json({error: "La 'cantidad máxima de stock' debe ser la mayor."})
+        console.log({min_stock}, {mid_stock}, {max_stock})
+        if(Number(min_stock) > Number(max_stock) || Number(min_stock) > Number(mid_stock)) return res.json({error: "La 'cantidad mínima de stock' debe ser la menor."})
+        if(Number(mid_stock) > Number(max_stock) || Number(mid_stock) < Number(min_stock)) return res.json({error: "La 'cantidad media de stock' debe ser la intermedia."})
+        if(Number(max_stock) < Number(mid_stock) || Number(max_stock) < Number(min_stock)) return res.json({error: "La 'cantidad máxima de stock' debe ser la mayor."})
 
         const {rows: items} = await sql`
 

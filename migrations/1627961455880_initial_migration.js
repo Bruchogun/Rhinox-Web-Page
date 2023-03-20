@@ -76,11 +76,8 @@ exports.up = pgm => {
 
         create table inv_expenses(
             id_inv_expense serial primary key,
-            id_item int REFERENCES items (id_item) ON UPDATE CASCADE ON DELETE CASCADE,
-            id_account int REFERENCES accounts (id_account) ON UPDATE CASCADE  ON DELETE CASCADE,
+            id_item int REFERENCES items (id_item) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
             quantity decimal(30,10) constraint positive_quantity check (quantity >= 0) not null,
-            amount decimal(30,10) constraint positive_amount check (amount >= 0) not null,
-            rate decimal(30,10) not null,
             created_at timestamp with time zone default current_timestamp
         );
 
@@ -172,7 +169,21 @@ exports.up = pgm => {
             description varchar(500) not null,
             created_at timestamp with time zone default current_timestamp
         );
------------------------------------------------------------DATA----------------------------------------------------------------
+
+        create table recipes(
+            id_recipe serial primary key,
+            name varchar(100) not null,
+            description varchar(1000) not null,
+            created_at timestamp with time zone default current_timestamp
+        );
+
+        create table join_recipes_items(
+            id_join_recipes_item serial primary key,
+            id_recipe int REFERENCES recipes (id_recipe) ON UPDATE CASCADE  ON DELETE CASCADE,
+            id_item int REFERENCES items (id_item) ON UPDATE CASCADE  ON DELETE CASCADE,
+            created_at timestamp with time zone default current_timestamp
+        );
+---------------------------------------------------------DATA----------------------------------------------------------------
 
         INSERT INTO public.measures 
             ( name, unit ) 
@@ -219,25 +230,27 @@ exports.down = pgm => {
         ALTER SEQUENCE IF EXISTS balances_id_balance_seq RESTART WITH 1;
         ALTER TABLE IF EXISTS users DROP special_user;
          
-        DROP TABLE IF EXISTS exchange_currencys;
-        DROP TABLE IF EXISTS wire_transfers;
-        DROP TABLE IF EXISTS join_combos_items;
-        DROP TABLE IF EXISTS combos;
-        DROP TABLE IF EXISTS balance_movements;
-        DROP TABLE IF EXISTS balances;
-        DROP TYPE IF EXISTS movement_category;
-        DROP TABLE IF EXISTS general_expenses;
-        DROP TABLE IF EXISTS client_addresses;
-        DROP TABLE IF EXISTS clients;
-        DROP TABLE IF EXISTS inv_incomes;
-        DROP TABLE IF EXISTS inv_expenses;
-        DROP TABLE IF EXISTS accounts;
-        DROP TABLE IF EXISTS currencys;
-        DROP TABLE IF EXISTS items;
-        DROP TABLE IF EXISTS products;
-        DROP TABLE IF EXISTS supplier_addresses;
-        DROP TABLE IF EXISTS suppliers;
-        DROP TABLE IF EXISTS brands;
-        DROP TABLE IF EXISTS measures;
+        DROP TABLE IF EXISTS exchange_currencys CASCADE;
+        DROP TABLE IF EXISTS wire_transfers CASCADE;
+        DROP TABLE IF EXISTS join_combos_items CASCADE;
+        DROP TABLE IF EXISTS combos CASCADE;
+        DROP TABLE IF EXISTS balance_movements CASCADE;
+        DROP TABLE IF EXISTS balances CASCADE;
+        DROP TYPE IF EXISTS movement_category CASCADE;
+        DROP TABLE IF EXISTS general_expenses CASCADE;
+        DROP TABLE IF EXISTS client_addresses CASCADE;
+        DROP TABLE IF EXISTS clients CASCADE;
+        DROP TABLE IF EXISTS inv_incomes CASCADE;
+        DROP TABLE IF EXISTS inv_expenses CASCADE;
+        DROP TABLE IF EXISTS accounts CASCADE;
+        DROP TABLE IF EXISTS currencys CASCADE;
+        DROP TABLE IF EXISTS items CASCADE;
+        DROP TABLE IF EXISTS products CASCADE;
+        DROP TABLE IF EXISTS supplier_addresses CASCADE;
+        DROP TABLE IF EXISTS suppliers CASCADE;
+        DROP TABLE IF EXISTS brands CASCADE;
+        DROP TABLE IF EXISTS measures CASCADE;
+        DROP TABLE IF EXISTS recipes CASCADE;
+        DROP TABLE IF EXISTS join_recipes_items CASCADE;
         ` 
 };

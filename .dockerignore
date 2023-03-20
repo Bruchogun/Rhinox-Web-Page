@@ -1,0 +1,13 @@
+*.log
+.dockerignore
+.git
+.gitignore
+__sapper__/*
+Dockerfile
+node_modules
+npm-debug.log*
+
+*.md
+
+.vscode
+.env*

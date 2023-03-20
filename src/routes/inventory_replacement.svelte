@@ -18,7 +18,6 @@
 				id_account: account.id_account,
 				quantity,
 				cost,
-				currency_code: account.code
 			}),headers: {'Content-Type': 'application/json'}
 		});
 		cleanWindows()

@@ -122,6 +122,7 @@
 			</SideNavMenu>
 
 			<SideNavMenu text="Gestión de inventario">
+				<SideNavMenuItem href="create_inv_expense" text="Gastos de inventario"/>
 				<SideNavMenuItem href="inventory" text="Control de inventario"/>
 				<SideNavMenuItem href="inventory_replacement" text="Reposicion de Inventario"/>
 				<SideNavMenuItem href="create_item" text="Ingreso de inventario"/>
