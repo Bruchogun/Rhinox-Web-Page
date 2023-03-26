@@ -16,7 +16,6 @@
 			method: 'POST',
 			body: JSON.stringify({
 				id_account: account.id_account,
-				expense_currency_code: account.code,
 				amount,
 				description,
 				id_measure: measure.value,

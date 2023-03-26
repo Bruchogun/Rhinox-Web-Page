@@ -1,7 +1,6 @@
 import { compose } from "compose-middleware";
 import { ROLES_CREATE } from "../../constants/PERMISSIONS";
 import { sql } from "../../db";
-import { getRate } from "../../functions";
 import checkPermissionsMW from "../../middlewares/checkPermissionsMW";
 
 export const post = compose(

@@ -4,19 +4,7 @@
 	import { session, notifications, loadingIsActive } from '../stores';
 	import { checkPermissions } from '../functions';
 	import { goto } from '@sapper/app'
-	import {ADMIN_EXPENSES_CREATE,
-			EXCHANGE_CURRENCY_CREATE,
-			GENERAL_EXPENSES_CREATE,
-			INV_ODT_EXPENSES_CREATE,
-			INV_PURCHASES_CREATE,
-			ODT_CREATE,
-			ODT_UPDATE,
-			STOCKS_CREATE,
-			STOCKS_READ,
-			STORAGES_CREATE,
-			USERS_CREATE,
-			PRESIDENT,
-			ODT_READ,
+	import {USERS_CREATE,
 			USERS_READ
 		} from '../constants/PERMISSIONS';
 

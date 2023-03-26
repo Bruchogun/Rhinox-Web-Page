@@ -20,17 +20,17 @@ export const checkPermissions = (permissions_ids, userPermissions) => {
  * currency_code should not be received from frontend, is a vulnerability
  * se debe hacer previamente un query para obtener la moneda de la ODT
  */
-export async function getRate(counter_currency_code, base_currency_code){
-    if (counter_currency_code === base_currency_code) {
-        return 1;
-    }
-    const url = `https://bolivarparalelo.com/api/rate/${counter_currency_code}/${base_currency_code}`;
-    const response = await fetch(url);
-    const rates = await response.json();
-    const rate = (rates.buy + rates.sell) / 2;
-    console.log({url});
-    return rate;
-}
+// export async function getRate(counter_currency_code, base_currency_code){
+//     if (counter_currency_code === base_currency_code) {
+//         return 1;
+//     }
+//     const url = `https://bolivarparalelo.com/api/rate/${counter_currency_code}/${base_currency_code}`;
+//     const response = await fetch(url);
+//     const rates = await response.json();
+//     const rate = (rates.buy + rates.sell) / 2;
+//     console.log({url});
+//     return rate;
+// }
 
 /**
  * @param {string} msg message to notify

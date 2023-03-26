@@ -87,7 +87,7 @@ exports.up = pgm => {
             id_account int REFERENCES accounts (id_account) ON UPDATE CASCADE  ON DELETE CASCADE,
             quantity decimal(30,10) constraint positive_quantity check (quantity >= 0) not null,
             amount decimal(30,10) constraint positive_amount check (amount >= 0) not null,
-            rate decimal(30,10) not null,
+            -- rate decimal(30,10) not null,
             created_at timestamp with time zone default current_timestamp
         );
 
@@ -121,7 +121,7 @@ exports.up = pgm => {
             id_account int REFERENCES accounts (id_account) ON UPDATE CASCADE  ON DELETE CASCADE,
             quantity decimal(30,10) not null,
             amount decimal(30,10) not null,
-            rate decimal(30,10) not null,
+            -- rate decimal(30,10) not null,
             description varchar(500) not null,
             created_at timestamp with time zone default current_timestamp
         );
