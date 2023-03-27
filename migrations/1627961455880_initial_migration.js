@@ -36,24 +36,23 @@ exports.up = pgm => {
 
         create table products(
             id_product serial primary key,
-            id_measure int REFERENCES measures (id_measure) ON UPDATE CASCADE ON DELETE CASCADE,
+            id_measure int REFERENCES measures (id_measure) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
             code varchar(100) unique not null,
-            description varchar(500) not null,
-            manufacture varchar(1000) not null,
+            min_stock decimal(30,10) not null,
+            max_stock decimal(30,10) not null,
+            description varchar(2000) not null,
             created_at timestamp with time zone default current_timestamp
         );
 
         create table items(
             id_item serial primary key,
-            id_product int REFERENCES products (id_product) ON UPDATE CASCADE ON DELETE CASCADE,
-            id_brand int REFERENCES brands (id_brand) ON UPDATE CASCADE ON DELETE CASCADE,
-            id_supplier int REFERENCES suppliers (id_supplier) ON UPDATE CASCADE ON DELETE CASCADE,
+            id_product int REFERENCES products (id_product) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+            id_brand int REFERENCES brands (id_brand) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+            id_supplier int REFERENCES suppliers (id_supplier) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
             cost decimal(30,10) not null,
             price decimal(30,10) not null,
-            min_stock decimal(30,10) not null,
-            mid_stock decimal(30,10) not null,
-            max_stock decimal(30,10) not null,
-            quantity decimal(30,10) default 0 constraint positive_quantity check (quantity >= 0) not null,
+            quantity decimal(30,10) default 0 constraint positive_quantity check (quantity >= 0) NOT NULL,
+            manufacture varchar(2000) not null,
             created_at timestamp with time zone default current_timestamp,
             unique (id_product, id_brand)
         );
@@ -148,13 +147,13 @@ exports.up = pgm => {
             id_combo serial primary key,
             name varchar(100) not null,
             description varchar(2000) not null,
-            manufacture varchar(2000) not null,
+            price decimal(30,10) not null,
             created_at timestamp with time zone default current_timestamp
         );
 
         create table join_combos_items(
-            id_combo int REFERENCES combos (id_combo) ON UPDATE CASCADE  ON DELETE CASCADE,
-            id_item int REFERENCES items (id_item) ON UPDATE CASCADE  ON DELETE CASCADE,
+            id_combo int REFERENCES combos (id_combo) ON UPDATE CASCADE  ON DELETE CASCADE NOT NULL,
+            id_item int REFERENCES items (id_item) ON UPDATE CASCADE  ON DELETE CASCADE NOT NULL,
             created_at timestamp with time zone default current_timestamp
         );
 

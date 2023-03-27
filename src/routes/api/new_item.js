@@ -6,22 +6,20 @@ import checkPermissionsMW from "../../middlewares/checkPermissionsMW";
 export const post = compose(
     checkPermissionsMW(ROLES_CREATE),
     async (req, res) => {
-        const { code, brand, id_supplier, id_measure, cost, price, min_stock, mid_stock, max_stock, description, manufacture} = req.body;
+        const { code, brand, id_supplier, id_measure, cost, price, min_stock, max_stock, description, manufacture} = req.body;
         if(cost >= price) return res.json({error: "El costo debe ser menor que el precio de venta."})
-        console.log({min_stock}, {mid_stock}, {max_stock})
-        if(Number(min_stock) > Number(max_stock) || Number(min_stock) > Number(mid_stock)) return res.json({error: "La 'cantidad mínima de stock' debe ser la menor."})
-        if(Number(mid_stock) > Number(max_stock) || Number(mid_stock) < Number(min_stock)) return res.json({error: "La 'cantidad media de stock' debe ser la intermedia."})
-        if(Number(max_stock) < Number(mid_stock) || Number(max_stock) < Number(min_stock)) return res.json({error: "La 'cantidad máxima de stock' debe ser la mayor."})
 
         const {rows: items} = await sql`
 
             WITH new_product as (
                 INSERT INTO public.products
-                    (id_measure, code, description, manufacture)
+                    (id_measure, code, description, min_stock, max_stock)
                     VALUES (${id_measure}::integer, 
                             ${code}::character varying, 
                             ${description}::character varying, 
-                            ${manufacture}::character varying)
+                            ${min_stock}::numeric, 
+                            ${max_stock}::numeric
+                            )
                     ON CONFLICT(code) DO NOTHING
                     RETURNING id_product
             ), new_brand as (
@@ -32,16 +30,14 @@ export const post = compose(
                     RETURNING id_brand
             )
                 INSERT INTO public.items
-                    ( id_brand, id_product, cost, price, min_stock, mid_stock, max_stock, id_supplier )
+                    ( id_brand, id_product, cost, price, id_supplier, manufacture )
                     SELECT
                         brand.id_brand,
                         product.id_product,
                         ${cost}::numeric,
                         ${price}::numeric,
-                        ${min_stock}::numeric, 
-                        ${mid_stock}::numeric, 
-                        ${max_stock}::numeric, 
-                        ${id_supplier}::integer
+                        ${id_supplier}::integer,
+                        ${manufacture}::character varying
                     FROM
                         (
                             SELECT COALESCE(

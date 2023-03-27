@@ -13,15 +13,14 @@ export const get = compose(
 
             id_item,
             quantity,
-            products.code as product_code,
+            products.code,
             measures.unit,
-            products.description,
-            products.manufacture,
-            items.cost,
-            items.price,
-            min_stock,
-            mid_stock,
-            max_stock,
+            products.description as product_description,
+            manufacture,
+            cost,
+            price,
+            products.min_stock,
+            products.max_stock,
             suppliers.name as supplier,
             brands.name as brand_name
 

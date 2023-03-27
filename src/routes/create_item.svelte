@@ -8,7 +8,6 @@
 	import { apiFetch } from '../functions';
     
 	let min;
-	let mid;
 	let top;
 	let description;
 	let manufacture;
@@ -27,11 +26,19 @@
 			id_measure = measure.value;
 		}
 
-		if(!description || !manufacture){
+		if(!description){
 			description = "None";
+		}
+		if(!manufacture){
 			manufacture = "None";
 		}
-		await apiFetch("/api/new_item_product_brand",{
+		if(!min){
+			min = 0;
+		}
+		if(!top){
+			top = 1;
+		}
+		await apiFetch("/api/new_item",{
 			method: 'POST',
 			body: JSON.stringify({
 				code: product.value,
@@ -41,7 +48,6 @@
 				cost,
 				price,
 				min_stock: min,
-				mid_stock: mid,
 				max_stock: top,
 				description,
 				manufacture
@@ -61,14 +67,9 @@
 		price=null
 		measure=null
 		min=null
-		mid=null
 		top=null
 	}
 
-	$: console.log(product);
-	$: console.log(brand);
-	$: console.log(supplier);
-	$: console.log(measure);
 </script>
 
 <FluidForm on:submit={add_item}>
@@ -89,17 +90,15 @@
 
 <TextInput type="Number" labelText="Precio de Venta" placeholder="Ingrese el monto..." bind:value={price}/>
 
-<TextInput type="Number" labelText="Cantidad mínima de stock" placeholder="Ingrese el monto..." bind:value={min}/>
-
-<TextInput type="Number" labelText="Cantidad media de stock" placeholder="Ingrese el monto..." bind:value={mid}/>
-
-<TextInput type="Number" labelText="Cantidad máxima de stock" placeholder="Ingrese el monto..." bind:value={top}/>
-
 {#if product && !product.id_product}
 
-<TextArea labelText="Descripción" placeholder="Ingrese la descripción del artículo..." bind:value={description}/>
+	<TextInput type="Number" labelText="Cantidad mínima de stock" placeholder="Ingrese el monto..." bind:value={min}/>
 
-<TextArea labelText="Detalles de fabricación" placeholder="Ingrese los detalles de fabricación..." bind:value={manufacture}/>
+	<TextInput type="Number" labelText="Cantidad máxima de stock" placeholder="Ingrese el monto..." bind:value={top}/>
+
+	<TextArea labelText="Descripción" placeholder="Ingrese la descripción del artículo..." bind:value={description}/>
+
+	<TextArea labelText="Detalles de fabricación" placeholder="Ingrese los detalles de fabricación..." bind:value={manufacture}/>
 
 {/if}
 
