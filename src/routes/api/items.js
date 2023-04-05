@@ -22,7 +22,8 @@ export const get = compose(
             products.min_stock,
             products.max_stock,
             suppliers.name as supplier,
-            brands.name as brand_name
+            brands.name as brand_name,
+            is_vendible
 
             from items
             join brands using(id_brand)

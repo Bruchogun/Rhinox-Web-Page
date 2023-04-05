@@ -16,8 +16,8 @@
 	})
 
 	$: if (brands.length > 0) {
-		brandsToList = brands.map(({ name }) => {
-			return ({value: name, label: name})
+		brandsToList = brands.map(( brand ) => {
+			return ({...brand, id:brand.id_brand , value: brand.name, label: brand.name})
 		})
 	}
 

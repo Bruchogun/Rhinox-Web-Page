@@ -16,7 +16,7 @@ exports.up = pgm => {
 
         create table suppliers(
             id_supplier serial primary key,
-            name varchar(100) not null,
+            name varchar(100) unique not null,
             phone_number1 varchar(30),
             phone_number2 varchar(30),
             phone_number3 varchar(30),
@@ -28,7 +28,7 @@ exports.up = pgm => {
 
         create table supplier_addresses(
             id_supplier_address serial primary key,
-            id_supplier int REFERENCES suppliers (id_supplier) ON UPDATE CASCADE ON DELETE CASCADE,
+            id_supplier int REFERENCES suppliers (id_supplier) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
             address varchar(100) not null,
             description varchar(500),
             created_at timestamp with time zone default current_timestamp
@@ -53,8 +53,9 @@ exports.up = pgm => {
             price decimal(30,10) not null,
             quantity decimal(30,10) default 0 constraint positive_quantity check (quantity >= 0) NOT NULL,
             manufacture varchar(2000) not null,
+            is_vendible boolean default TRUE,
             created_at timestamp with time zone default current_timestamp,
-            unique (id_product, id_brand)
+            unique (id_product, id_brand, id_supplier)
         );
 
         create table currencys(
@@ -68,7 +69,7 @@ exports.up = pgm => {
 
         create table accounts(
             id_account serial primary key,
-            id_currency int REFERENCES currencys (id_currency) ON UPDATE CASCADE  ON DELETE CASCADE,
+            id_currency int REFERENCES currencys (id_currency) ON UPDATE CASCADE  ON DELETE CASCADE NOT NULL,
             name varchar(50) not null,
             created_at timestamp with time zone default current_timestamp
         );
@@ -82,11 +83,10 @@ exports.up = pgm => {
 
         create table inv_incomes(
             id_inv_income serial primary key,
-            id_item int REFERENCES items (id_item) ON UPDATE CASCADE ON DELETE CASCADE,
-            id_account int REFERENCES accounts (id_account) ON UPDATE CASCADE  ON DELETE CASCADE,
+            id_item int REFERENCES items (id_item) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+            id_account int REFERENCES accounts (id_account) ON UPDATE CASCADE  ON DELETE CASCADE NOT NULL,
             quantity decimal(30,10) constraint positive_quantity check (quantity >= 0) not null,
             amount decimal(30,10) constraint positive_amount check (amount >= 0) not null,
-            -- rate decimal(30,10) not null,
             created_at timestamp with time zone default current_timestamp
         );
 
@@ -105,7 +105,7 @@ exports.up = pgm => {
         
         create table client_addresses(
             id_client_address serial primary key,
-            id_client int REFERENCES clients (id_client) ON UPDATE CASCADE ON DELETE CASCADE,
+            id_client int REFERENCES clients (id_client) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
             address varchar(100) not null,
             description varchar(500),
             created_at timestamp with time zone default current_timestamp
@@ -116,11 +116,10 @@ exports.up = pgm => {
 
         create table general_expenses(
             id_general_expense serial primary key,
-            id_measure int REFERENCES measures (id_measure) ON UPDATE CASCADE ON DELETE CASCADE,
-            id_account int REFERENCES accounts (id_account) ON UPDATE CASCADE  ON DELETE CASCADE,
+            id_measure int REFERENCES measures (id_measure) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+            id_account int REFERENCES accounts (id_account) ON UPDATE CASCADE  ON DELETE CASCADE NOT NULL,
             quantity decimal(30,10) not null,
             amount decimal(30,10) not null,
-            -- rate decimal(30,10) not null,
             description varchar(500) not null,
             created_at timestamp with time zone default current_timestamp
         );
@@ -132,11 +131,11 @@ exports.up = pgm => {
             created_at timestamp with time zone default current_timestamp
         );
 
-        create type movement_category as ENUM ('inv_expenses', 'inv_incomes', 'general_expenses', 'wire_transfers', 'exchange_currencys');
+        create type movement_category as ENUM ('inv_expenses', 'inv_incomes', 'general_expenses', 'wire_transfers', 'exchange_currencys', 'orders');
         
         create table balance_movements(
             id_balance_movement serial primary key,
-            id_balance int REFERENCES balances (id_balance) ON UPDATE CASCADE  ON DELETE CASCADE,
+            id_balance int REFERENCES balances (id_balance) ON UPDATE CASCADE  ON DELETE CASCADE NOT NULL,
             id_movement_category integer not null,
             type_movement_category movement_category not null,
             amount decimal(30,10) not null,
@@ -154,6 +153,7 @@ exports.up = pgm => {
         create table join_combos_items(
             id_combo int REFERENCES combos (id_combo) ON UPDATE CASCADE  ON DELETE CASCADE NOT NULL,
             id_item int REFERENCES items (id_item) ON UPDATE CASCADE  ON DELETE CASCADE NOT NULL,
+            quantity decimal(30,10) default 1,
             created_at timestamp with time zone default current_timestamp
         );
 
@@ -171,15 +171,20 @@ exports.up = pgm => {
 
         create table recipes(
             id_recipe serial primary key,
-            name varchar(100) not null,
-            description varchar(1000) not null,
+            name varchar(100) not null unique,
+            description varchar(2000) not null,
+            manufacture varchar(2000) not null,
+            time decimal(30,10) not null,
+            cost decimal(30,10) not null,
+            price decimal(30,10) not null,
+            is_vendible boolean default TRUE,
             created_at timestamp with time zone default current_timestamp
         );
 
         create table join_recipes_items(
-            id_join_recipes_item serial primary key,
-            id_recipe int REFERENCES recipes (id_recipe) ON UPDATE CASCADE  ON DELETE CASCADE,
-            id_item int REFERENCES items (id_item) ON UPDATE CASCADE  ON DELETE CASCADE,
+            id_recipe int REFERENCES recipes (id_recipe) ON UPDATE CASCADE  ON DELETE CASCADE NOT NULL,
+            id_item int REFERENCES items (id_item) ON UPDATE CASCADE  ON DELETE CASCADE NOT NULL,
+            quantity decimal(30,10) default 1,
             created_at timestamp with time zone default current_timestamp
         );
 ---------------------------------------------------------DATA----------------------------------------------------------------
@@ -209,6 +214,16 @@ exports.up = pgm => {
                 ( '1'::integer, 'Davivienda'::character varying ),
                 ( '1'::integer, 'DaviPlata'::character varying ),
                 ( '1'::integer, 'Nequi'::character varying );
+
+        INSERT INTO public.suppliers 
+            ( name, phone_number1, email, description ) 
+            VALUES 
+                ( 'Rhinox Pizza'::character varying, '3138420031'::character varying, 'fastfoodrhinox@gmail.com'::character varying, 'Fabricación propia'::character varying );
+        
+        INSERT INTO public.supplier_addresses 
+            ( id_supplier, address, description ) 
+            VALUES 
+                ( 1::integer, 'Carrera 76#80B-16'::character varying, 'Bogotá noroccidente, Minuto de Dios'::character varying);
 
         INSERT INTO balances 
             (id_account)

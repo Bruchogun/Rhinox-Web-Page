@@ -1,56 +1,78 @@
 <script>
 	import 'carbon-components-svelte/css/white.css';
-	import { FluidForm, TextInput, Button, TextArea } from "carbon-components-svelte";
+	import { FluidForm, TextInput, Button, TextArea, Checkbox } from "carbon-components-svelte";
 	import { apiFetch } from '../functions';
-	import Ingredients_recipe from '../components/Ingredients_recipe.svelte';
+	import Items_quantity from '../components/Items_quantity.svelte';
+    import Measures from '../components/selects/Measures.svelte';
 
 	let name;
 	let description;
 	let manufacture;
 	let recipe_price;
+	let recipe_cost;
 	let items_recipe;
+	let items;
 	let prepare_time;
+	let checked = true;
+	let min;
+	let max;
+	let measure;
+	let unique;
 
 	async function create_recipe(){
-		items_recipe = items_recipe.map(object => {
+		items = items_recipe.map(object => {
 			return ({
 				id_item: object.item.id_item,
 				quantity: object.quantity
 			})
 		});
-		console.log(items_recipe);
 		await apiFetch ('/api/create_recipe', {
                 method: 'POST',
                 body: JSON.stringify({
                     name,
+					items: items_recipe,
+					id_measure: checked ? undefined : measure.value,
+					recipe_cost,
 					recipe_price,
+					time: prepare_time,
 					description,
 					manufacture,
-					items_recipe,
-					prepare_time
+					checked,
+					min_stock: checked ? 0 : min,
+					max_stock: checked ? 0 : max
                 }),
                 headers: {'Content-Type': 'application/json'}
             })
-			name = null;
-			description = "";
-			manufacture = "";
-			prepare_time = null;
+		setTimeout(()=> {location.reload();}, 2000);
 	}
-
 </script>
 
 <FluidForm on:submit={create_recipe}>
-	<TextInput labelText="Nombre" placeholder="Ingrese el nombre de la receta..." bind:value={name}/>
+	{#key unique}
+	<TextInput labelText="Nombre" placeholder="Ingrese el nombre" bind:value={name}/>
 	
-	<Ingredients_recipe label="Ingredientes" bind:items_recipe={items_recipe}/>
+	<Items_quantity label="Ingredientes" bind:items_recipe={items_recipe} sortByVendible={false}/>
 
-	<TextInput labelText="Precio de la receta" placeholder="Precio..." bind:value={recipe_price}/>
+	<Checkbox labelText="Apto para venta" bind:checked />
 
-	<TextInput labelText="Tiempo de preparación (minutos)" placeholder="Ingrese el tiempo de preparación en minutos..." bind:value={prepare_time}/>
- 
-	<TextArea labelText="Descripción" placeholder="Ingrese la descripción..." bind:value={description}/>
+	{#if !checked}
+		<Measures bind:measure={measure} />
+
+		<TextInput type="Number" labelText="Cantidad mínima de stock" placeholder="Ingrese el monto..." bind:value={min}/>
+
+		<TextInput type="Number" labelText="Cantidad máxima de stock" placeholder="Ingrese el monto..." bind:value={max}/>
+	{/if}
 	
-	<TextArea labelText="Preparación" placeholder="Ingrese las indicaciones de preparación..." bind:value={manufacture}/>
+	<TextInput type="Number" labelText="Costo de la receta" placeholder="Costo" bind:value={recipe_cost}/>
+	
+	<TextInput type="Number" labelText="Precio de la receta" placeholder="Precio" bind:value={recipe_price}/>
+	
+	<TextInput type="Number" labelText="Tiempo de preparación (minutos)" placeholder="Ingrese el tiempo" bind:value={prepare_time}/>
+	
+	<TextArea labelText="Descripción" placeholder="Ingrese la descripción" bind:value={description}/>
+	
+	<TextArea labelText="Preparación" placeholder="Ingrese las indicaciones de preparación" bind:value={manufacture}/>
 
+	{/key}
 	<Button type=submit >Crear receta</Button>
 </FluidForm>

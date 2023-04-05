@@ -1,6 +1,6 @@
 <script>
 	import 'carbon-components-svelte/css/white.css';
-	import { TextInput, Button, TextArea, FluidForm } from "carbon-components-svelte";
+	import { TextInput, Button, TextArea, FluidForm, Checkbox  } from "carbon-components-svelte";
 	import Measures from '../components/selects/Measures.svelte';
 	import Suppliers from '../components/selects/Suppliers.svelte';
 	import Brands from '../components/selects/Brands.svelte';
@@ -17,6 +17,7 @@
 	let cost;
 	let price;
 	let measure;
+	let checked = true;
 
 	async function add_item(){
 		let id_measure;
@@ -50,7 +51,8 @@
 				min_stock: min,
 				max_stock: top,
 				description,
-				manufacture
+				manufacture,
+				is_vendible: checked
 			}),
 			headers: {'Content-Type': 'application/json'}
 		})
@@ -74,34 +76,36 @@
 
 <FluidForm on:submit={add_item}>
 
-<Products bind:product={product} />
+	<Products bind:product={product} />
 
-<Brands bind:brand={brand} />
+	<Brands bind:brand={brand} />
 
-<Suppliers bind:supplier={supplier} />
+	<Suppliers bind:supplier={supplier} />
 
-{#if product && !product.id_product}
+	{#if product && !product.id_product}
 
-<Measures bind:measure={measure} />
+	<Measures bind:measure={measure} />
 
-{/if}
+	{/if}
 
-<TextInput type="Number" labelText="Costo" placeholder="Ingrese el monto..." bind:value={cost}/>
+	<TextInput type="Number" labelText="Costo" placeholder="Ingrese el monto..." bind:value={cost}/>
 
-<TextInput type="Number" labelText="Precio de Venta" placeholder="Ingrese el monto..." bind:value={price}/>
+	<TextInput type="Number" labelText="Precio de Venta" placeholder="Ingrese el monto..." bind:value={price}/>
 
-{#if product && !product.id_product}
+	{#if product && !product.id_product}
 
-	<TextInput type="Number" labelText="Cantidad mínima de stock" placeholder="Ingrese el monto..." bind:value={min}/>
+		<TextInput type="Number" labelText="Cantidad mínima de stock" placeholder="Ingrese el monto..." bind:value={min}/>
 
-	<TextInput type="Number" labelText="Cantidad máxima de stock" placeholder="Ingrese el monto..." bind:value={top}/>
+		<TextInput type="Number" labelText="Cantidad máxima de stock" placeholder="Ingrese el monto..." bind:value={top}/>
 
-	<TextArea labelText="Descripción" placeholder="Ingrese la descripción del artículo..." bind:value={description}/>
+		<TextArea labelText="Descripción" placeholder="Ingrese la descripción del artículo..." bind:value={description}/>
 
-	<TextArea labelText="Detalles de fabricación" placeholder="Ingrese los detalles de fabricación..." bind:value={manufacture}/>
+		<TextArea labelText="Detalles de fabricación" placeholder="Ingrese los detalles de fabricación..." bind:value={manufacture}/>
 
-{/if}
+	{/if}
+	
+	<Checkbox labelText="Apto para venta" bind:checked />
 
-<Button type=submit >Enviar</Button>
+	<Button type=submit >Enviar</Button>
 
 </FluidForm>

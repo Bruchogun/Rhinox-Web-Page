@@ -6,7 +6,7 @@ import checkPermissionsMW from "../../middlewares/checkPermissionsMW";
 export const post = compose(
     checkPermissionsMW(ROLES_CREATE),
     async (req, res) => {
-        const { code, brand, id_supplier, id_measure, cost, price, min_stock, max_stock, description, manufacture} = req.body;
+        const { code, brand, id_supplier, id_measure, cost, price, min_stock, max_stock, description, manufacture, is_vendible} = req.body;
         if(cost >= price) return res.json({error: "El costo debe ser menor que el precio de venta."})
 
         const {rows: items} = await sql`
@@ -30,14 +30,15 @@ export const post = compose(
                     RETURNING id_brand
             )
                 INSERT INTO public.items
-                    ( id_brand, id_product, cost, price, id_supplier, manufacture )
+                    ( id_brand, id_product, cost, price, id_supplier, manufacture, is_vendible )
                     SELECT
                         brand.id_brand,
                         product.id_product,
                         ${cost}::numeric,
                         ${price}::numeric,
                         ${id_supplier}::integer,
-                        ${manufacture}::character varying
+                        ${manufacture}::character varying,
+                        ${is_vendible}::boolean
                     FROM
                         (
                             SELECT COALESCE(

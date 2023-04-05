@@ -1,6 +1,7 @@
 <script>
 
 	export let item;
+	export let sortByVendible = false;
 	/** @type {"vertical" | "horizontal"}*/
 	import { onMount } from 'svelte';
 	import { apiFetch } from '../../functions';
@@ -17,14 +18,27 @@
 	
 	let itemsToList= [];
 	$: if (items) {
-		itemsToList = items.map( item => {
-			return ({...item,
-					code: item.product_code,
-					value: item.product_code, 
-					label: `Código: ${item.product_code} | Disponible: ${Number(item.quantity).toFixed(2)}${item.unit} | Marca: ${item.brand_name}`,
-					quantity: item.quantity,
-					id: item.id_item })
-		})
+		if(sortByVendible){
+			itemsToList = items.map( item => {
+					return ({...item,
+							code: item.code,
+							value: item.code, 
+							label: `${item.code} | Disponible: ${Number(item.quantity).toFixed(1)}${item.unit} | Marca: ${item.brand_name}`,
+							quantity: item.quantity,
+							id: item.id_item })		
+			})
+			itemsToList = itemsToList.filter(item => item.is_vendible)
+		}else{
+			itemsToList = items.map( item => {
+				return ({...item,
+						code: item.code,
+						value: item.code, 
+						label: `${item.code} | Disponible: ${Number(item.quantity).toFixed(1)}${item.unit} | Marca: ${item.brand_name}`,
+						quantity: item.quantity,
+						id: item.id_item })
+			})
+
+		}
 	}
 
 </script>
