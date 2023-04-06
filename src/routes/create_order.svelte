@@ -1,16 +1,17 @@
 <script>
 	import 'carbon-components-svelte/css/white.css';
-	import { TextInput, Button, TextArea, FluidForm, Tile } from "carbon-components-svelte";
+	import { TextInput, Button, TextArea, FluidForm, Checkbox } from "carbon-components-svelte";
 	import { apiFetch } from '../functions';
-	// import CombosExtras from '../components/Combos_extras.svelte';
 	import Clients from '../components/selects/Clients.svelte';
-import Accounts from '../components/selects/Accounts.svelte';
+	import Menu_quantity from '../components/Menu_quantity.svelte';
+    import ClientAddresses from '../components/selects/ClientAddresses.svelte';
 
-	let combos_extras;
-	let order_price;
 	let client;
-	let prepare_time;
-	let account;
+	let items;
+	let description;
+	let address;
+	let checked = false;
+	let price;
 
 	async function create_order(){
 		await apiFetch("/api/create_order",{
@@ -22,40 +23,40 @@ import Accounts from '../components/selects/Accounts.svelte';
 		})
 	}
 
-	$:if(combos_extras){
-		prepare_time = 0;
-		combos_extras.forEach(element => {
-			prepare_time = prepare_time + Number(element.combo.prepare_time)
+	$:console.log(client)
+	$:console.log(address)
+	$:console.log(items)
+
+	function set_price(){
+		price = 0;
+		items.forEach(item => {
+			if(item.item && item.quantity){
+				price += Number(item.item.price) * Number(item.quantity);
+			}
 		});
 	}
 
-	$:console.log(combos_extras);
-	$:console.log(order_price);
-	$:console.log(client);
+	$:if(items){
+		set_price()
+	}
 </script>
 
 <FluidForm on:submit={create_order}>
 
-<!-- <CombosExtras label="Combos" bind:order_price={order_price} bind:combos_extras={combos_extras}/> -->
+	<Clients bind:client={client} _IsCreatable={false}/>
 
-{#if prepare_time}
+	{#if client}
+		<ClientAddresses bind:address={address} _IsCreatable={false} id_client={ client ? client.id_client : null}/>
+	{/if}
 
-	<Tile>Tiempo de preparación: {prepare_time.toFixed()} minutos</Tile>
+	<Menu_quantity label="Menú"  bind:menu={items} />
 
-{/if}
+	<TextInput disabled={!checked} type="Number" labelText="Precio de la orden" bind:value={price}/>
+	
+	<Checkbox labelText="Cambiar precio" bind:checked />
 
-<Clients bind:client={client}/>
-
-{#if client && prepare_time}
-
-	<Tile>Tiempo total: {(prepare_time + Number(client.delivery_time)).toFixed()} minutos</Tile>
-
-	<Tile>Costo total: {(order_price + Number(client.cost)).toFixed()} COP</Tile>
-
-{/if}	
-
-<Accounts bind:account={account}/>
-
-<Button type=submit >Enviar</Button>
-
+	<TextArea labelText="Instrucciones" placeholder="Ingrese la descripción del gasto..." bind:value={description}/>
+	
+	<Button type=submit >Enviar</Button>
+	
 </FluidForm>

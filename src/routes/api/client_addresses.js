@@ -10,7 +10,7 @@ export const get = compose(
         const {rows: client_addresses} = await sql`
 
             select * from client_addresses
-            join clients using(id_client);
+                JOIN join_clients_client_addresses using(id_client_address);
 
             `;
 

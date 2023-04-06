@@ -23,10 +23,13 @@
 			}),
 			headers: {'Content-Type': 'application/json'}
 		})
+		name = '';
+		price = 0;
+		items_quantity = [];
+		recipes_quantity = [];
+		description = '';
 	}
 
-	$:console.log(items_quantity)
-	$:console.log(recipes_quantity)
 
 </script>
 

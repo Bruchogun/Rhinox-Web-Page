@@ -111,14 +111,14 @@
 
 			<SideNavMenu text="Ordenes">
 				<SideNavMenuItem href="create_order" text="Crear orden"/>
-				<SideNavMenuItem href="create_combos" text="Crear combos"/>
 				<!-- <SideNavMenuItem href="inventory_replacement" text="Reposicion de Inventario"/>
-				<SideNavMenuItem href="create_item" text="Ingreso de inventario"/>
-				<SideNavMenuItem href="create_suppliers" text="Registrar proveedor"/>
-				<SideNavMenuItem href="create_recipes" text="Crear receta"/> -->
+					<SideNavMenuItem href="create_item" text="Ingreso de inventario"/>
+					<SideNavMenuItem href="create_suppliers" text="Registrar proveedor"/>
+					<SideNavMenuItem href="create_recipes" text="Crear receta"/> -->
 			</SideNavMenu>
-
+				
 			<SideNavMenu text="Gestión de inventario">
+				<SideNavMenuItem href="create_combos" text="Crear combos"/>
 				<SideNavMenuItem href="create_inv_expense" text="Gastos de inventario"/>
 				<SideNavMenuItem href="inventory" text="Control de inventario"/>
 				<SideNavMenuItem href="inventory_replacement" text="Reposicion de Inventario"/>

@@ -19,7 +19,7 @@
 		combosToList = combos.map( combo => {
 			return ({...combo,
 					value: combo.id_combo, 
-					label: `${combo.name} | Tiempo: ${Number(combo.prepare_time).toFixed()} minutos`,
+					label: `${combo.name}`,
 					id: combo.id_combo })
 		})
 	}

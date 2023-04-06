@@ -17,7 +17,6 @@
 	let min;
 	let max;
 	let measure;
-	let unique;
 
 	async function create_recipe(){
 		items = items_recipe.map(object => {
@@ -43,12 +42,21 @@
                 }),
                 headers: {'Content-Type': 'application/json'}
             })
-		setTimeout(()=> {location.reload();}, 2000);
+			name = '';
+			description = '';
+			manufacture = '';
+			recipe_price = 0;
+			recipe_cost = 0;
+			items_recipe = [];
+			prepare_time = 0;
+			checked = true;
+			min = 0;
+			max = 0;
+			measure = undefined;
 	}
 </script>
 
 <FluidForm on:submit={create_recipe}>
-	{#key unique}
 	<TextInput labelText="Nombre" placeholder="Ingrese el nombre" bind:value={name}/>
 	
 	<Items_quantity label="Ingredientes" bind:items_recipe={items_recipe} sortByVendible={false}/>
@@ -73,6 +81,5 @@
 	
 	<TextArea labelText="Preparación" placeholder="Ingrese las indicaciones de preparación" bind:value={manufacture}/>
 
-	{/key}
 	<Button type=submit >Crear receta</Button>
 </FluidForm>

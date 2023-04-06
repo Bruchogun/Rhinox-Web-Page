@@ -9,8 +9,7 @@ export const get = compose(
 
         const {rows: supplier_addresses} = await sql`
 
-            select * from supplier_addresses
-            join suppliers using(id_supplier);
+            select * from supplier_addresses;
 
             `;
 

@@ -11,9 +11,7 @@ export const get = compose(
 
         const {rows: clients} = await sql`
 
-            select * from client_addresses
-            
-            JOIN clients using(id_client);
+            select * from clients;
             `
         ;
 

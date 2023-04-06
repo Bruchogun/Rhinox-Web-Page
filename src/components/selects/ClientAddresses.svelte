@@ -1,6 +1,8 @@
 <script>
 
 	export let address;
+	export let id_client;
+	export let _IsCreatable = true;
 	/** @type {"vertical" | "horizontal"}*/
 	import { onMount } from 'svelte';
 	import { apiFetch } from '../../functions';
@@ -19,12 +21,13 @@
 		client_addressesToList = client_addresses.map( address => {
 			return ({...address,
 					value: address.id_client_address, 
-					label: `${address.id_client_address} | ${address.name} ${address.last_name} | ${address.address}`,
+					label: `${address.id_client_address} | ${address.address}`,
 					id: address.id_client_address
 				})
 		})
+		if(id_client) client_addressesToList = client_addressesToList.filter(x => x.id_client === id_client)
 	}
 
 </script>
 
-<Select placeholder="Ingrese la dirección..." bind:selected={address} on:select items={client_addressesToList} isCreatable="true"/>
+<Select placeholder="Ingrese la dirección..." bind:selected={address} on:select items={client_addressesToList} isCreatable={_IsCreatable}/>

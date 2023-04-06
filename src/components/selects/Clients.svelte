@@ -1,5 +1,6 @@
 <script>
 
+	export let _IsCreatable = true;
 	export let client;
 	/** @type {"vertical" | "horizontal"}*/
 	import { onMount } from 'svelte';
@@ -20,10 +21,10 @@
 		clientsToList = clients.map(client => {
 			return ({...client, 
 				value: client.id_client, 
-				label: `${client.name} ${client.last_name} | Tiempo: ${Number(client.delivery_time).toFixed()} minutos | Envío: ${Number(client.cost).toFixed()} COP`})
+				label: `${client.name} ${client.last_name}`})
 		})
 	}
 
 </script>
 
-<Select placeholder="Clientes..." bind:selected={client} items={clientsToList} />
+<Select placeholder="Clientes..." bind:selected={client} items={clientsToList} isCreatable={_IsCreatable} />

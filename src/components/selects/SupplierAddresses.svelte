@@ -19,7 +19,7 @@
 		supplier_addressesToList = supplier_addresses.map( address => {
 			return ({...address,
 					value: address.id_supplier_address, 
-					label: `${address.id_supplier_address} | ${address.name} | ${address.address}`,
+					label: `${address.id_supplier_address} | ${address.address}`,
 					id: address.id_supplier_address
 				})
 		})

@@ -19,8 +19,8 @@ exports.up = pgm => {
             name varchar(100) unique not null,
             phone_number1 varchar(30),
             phone_number2 varchar(30),
-            phone_number3 varchar(30),
-            phone_number4 varchar(30),
+            phone_code1 varchar(10),
+            phone_code2 varchar(10),
             email varchar(100),
             description varchar(500),
             created_at timestamp with time zone default current_timestamp
@@ -28,10 +28,10 @@ exports.up = pgm => {
 
         create table supplier_addresses(
             id_supplier_address serial primary key,
-            id_supplier int REFERENCES suppliers (id_supplier) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
-            address varchar(100) not null,
+            address varchar(500) not null,
             description varchar(500),
-            created_at timestamp with time zone default current_timestamp
+            created_at timestamp with time zone default current_timestamp,
+            UNIQUE (address)
         );
 
         create table products(
@@ -96,8 +96,8 @@ exports.up = pgm => {
             last_name varchar(100),
             phone_number1 varchar(30),
             phone_number2 varchar(30),
-            phone_number3 varchar(30),
-            phone_number4 varchar(30),
+            phone_code1 varchar(10),
+            phone_code2 varchar(10),
             email varchar(100),
             description varchar(500),
             created_at timestamp with time zone default current_timestamp
@@ -105,10 +105,10 @@ exports.up = pgm => {
         
         create table client_addresses(
             id_client_address serial primary key,
-            id_client int REFERENCES clients (id_client) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
-            address varchar(100) not null,
+            address varchar(500) NOT NULL,
             description varchar(500),
-            created_at timestamp with time zone default current_timestamp
+            created_at timestamp with time zone default current_timestamp,
+            UNIQUE(address)
         );
 
         alter table users
@@ -131,7 +131,7 @@ exports.up = pgm => {
             created_at timestamp with time zone default current_timestamp
         );
 
-        create type movement_category as ENUM ('inv_expenses', 'inv_incomes', 'general_expenses', 'wire_transfers', 'exchange_currencys', 'orders');
+        create type movement_category as ENUM ('inv_expenses', 'inv_incomes', 'general_expenses', 'wire_transfers', 'exchange_currencys', 'orders', 'wastes');
         
         create table balance_movements(
             id_balance_movement serial primary key,
@@ -187,17 +187,64 @@ exports.up = pgm => {
             quantity decimal(30,10) default 1,
             created_at timestamp with time zone default current_timestamp
         );
+
+        create table join_clients_client_addresses(
+            id_join_clients_client_address serial primary key,
+            id_client int REFERENCES clients (id_client) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+            id_client_address int REFERENCES client_addresses (id_client_address) ON UPDATE CASCADE  ON DELETE CASCADE NOT NULL,
+            created_at timestamp with time zone default current_timestamp,
+            UNIQUE (id_client, id_client_address)
+        );
+        
+        create table orders(
+            id_order serial primary key,
+            id_join_clients_client_address int REFERENCES join_clients_client_addresses (id_join_clients_client_address) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+            price decimal(30,10) not null,
+            description varchar(2000) not null,
+            is_active boolean default TRUE,
+            is_paid boolean default FALSE,
+            created_at timestamp with time zone default current_timestamp
+        );
+
+        create table join_oders_items(
+            id_order int REFERENCES orders (id_order) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+            id_item int REFERENCES items (id_item) ON UPDATE CASCADE  ON DELETE CASCADE NOT NULL,
+            created_at timestamp with time zone default current_timestamp
+        );
+
+        create table join_oders_recipes(
+            id_order int REFERENCES orders (id_order) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+            id_recipe int REFERENCES recipes (id_recipe) ON UPDATE CASCADE  ON DELETE CASCADE NOT NULL,
+            created_at timestamp with time zone default current_timestamp
+        );
+
+        create table join_oders_combos(
+            id_order int REFERENCES orders (id_order) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+            id_combo int REFERENCES combos (id_combo) ON UPDATE CASCADE  ON DELETE CASCADE NOT NULL,
+            created_at timestamp with time zone default current_timestamp
+        );
+
+        create table join_suppliers_supplier_addresses(
+            id_join_suppliers_supplier_address serial primary key,
+            id_supplier int REFERENCES suppliers (id_supplier) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+            id_supplier_address int REFERENCES supplier_addresses (id_supplier_address) ON UPDATE CASCADE  ON DELETE CASCADE NOT NULL,
+            created_at timestamp with time zone default current_timestamp,
+            UNIQUE(id_supplier, id_supplier_address)
+        );
 ---------------------------------------------------------DATA----------------------------------------------------------------
 
         INSERT INTO public.measures 
             ( name, unit ) 
             VALUES 
                 ( 'Unidad'::character varying, 'und'::character varying ),
-                ( 'Gramo'::character varying, 'g'::character varying ),  
+                ( 'Gramo'::character varying, 'g'::character varying ),
+                ( 'Kilogramo'::character varying, 'kg'::character varying ),
                 ( 'Centímetro'::character varying, 'cm'::character varying ),
                 ( 'Mililitro'::character varying, 'ml'::character varying ),
+                ( 'Litro'::character varying, 'l'::character varying ),
                 ( 'Centímetro cuadrado'::character varying, 'cm²'::character varying ),
                 ( 'Centímetro cúbico'::character varying, 'cm³'::character varying ),
+                ( 'Minuto'::character varying, 'min'::character varying ),
                 ( 'Hora'::character varying, 'h'::character varying );
 
         INSERT INTO public.currencys 
@@ -213,17 +260,23 @@ exports.up = pgm => {
                 ( '1'::integer, 'Caja Chica'::character varying ),
                 ( '1'::integer, 'Davivienda'::character varying ),
                 ( '1'::integer, 'DaviPlata'::character varying ),
+                ( '1'::integer, 'Rappi'::character varying ),
                 ( '1'::integer, 'Nequi'::character varying );
 
         INSERT INTO public.suppliers 
-            ( name, phone_number1, email, description ) 
+            ( name, phone_number1, phone_code1, email, description ) 
             VALUES 
-                ( 'Rhinox Pizza'::character varying, '3138420031'::character varying, 'fastfoodrhinox@gmail.com'::character varying, 'Fabricación propia'::character varying );
+                ( 'Rhinox Pizza'::character varying, '3138420031'::character varying, '57'::character varying, 'fastfoodrhinox@gmail.com'::character varying, 'Fabricación propia'::character varying );
         
         INSERT INTO public.supplier_addresses 
-            ( id_supplier, address, description ) 
+            ( address, description ) 
             VALUES 
-                ( 1::integer, 'Carrera 76#80B-16'::character varying, 'Bogotá noroccidente, Minuto de Dios'::character varying);
+                ( 'Carrera 76#80B-16'::character varying, 'Bogotá noroccidente, Minuto de Dios'::character varying);
+
+        INSERT INTO public.join_suppliers_supplier_addresses 
+            ( id_supplier, id_supplier_address ) 
+            VALUES 
+                ( 1::integer, 1::integer);
 
         INSERT INTO balances 
             (id_account)
@@ -266,5 +319,11 @@ exports.down = pgm => {
         DROP TABLE IF EXISTS measures CASCADE;
         DROP TABLE IF EXISTS recipes CASCADE;
         DROP TABLE IF EXISTS join_recipes_items CASCADE;
+        DROP TABLE IF EXISTS join_clients_client_addresses CASCADE;
+        DROP TABLE IF EXISTS orders CASCADE;
+        DROP TABLE IF EXISTS join_oders_items CASCADE;
+        DROP TABLE IF EXISTS join_oders_recipes CASCADE;
+        DROP TABLE IF EXISTS join_oders_combos CASCADE;
+        DROP TABLE IF EXISTS join_suppliers_supplier_addresses CASCADE;
         ` 
 };

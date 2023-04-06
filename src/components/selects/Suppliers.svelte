@@ -17,11 +17,11 @@
 	})
 
 	$: if (suppliers.length > 0) {
-		suppliersToList = suppliers.map(({ id_supplier, name }) => {
-			return ({value: id_supplier, label: name})
+		suppliersToList = suppliers.map((supplier) => {
+			return ({...supplier, value: supplier.id_supplier, label: supplier.name})
 		})
 	}
 
 </script>
 
-<Select placeholder="Proveedores..." bind:selected={supplier} items={suppliersToList}/>
+<Select placeholder="Proveedores..." bind:selected={supplier} items={suppliersToList} isCreatable="true"/>
