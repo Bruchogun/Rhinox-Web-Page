@@ -61,7 +61,7 @@
 	}
 </style>
   
-  <Header company="Rhinox" platformName="Página Web" bind:isSideNavOpen >
+  <Header company="Rhinox" platformName="Página Web" bind:isSideNavOpen linkIsActive href='/'>
 
 	<div slot="skip-to-content">
 	  <SkipToContent/>

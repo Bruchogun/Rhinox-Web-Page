@@ -96,8 +96,8 @@ exports.up = pgm => {
             last_name varchar(100),
             phone_number1 varchar(30),
             phone_number2 varchar(30),
-            phone_code1 varchar(10),
-            phone_code2 varchar(10),
+            phone_code1 varchar(10) DEFAULT '57',
+            phone_code2 varchar(10) DEFAULT '57',
             email varchar(100),
             description varchar(500),
             created_at timestamp with time zone default current_timestamp
@@ -144,7 +144,7 @@ exports.up = pgm => {
 
         create table combos(
             id_combo serial primary key,
-            name varchar(100) not null,
+            name varchar(100) not null unique,
             description varchar(2000) not null,
             price decimal(30,10) not null,
             created_at timestamp with time zone default current_timestamp
@@ -209,18 +209,21 @@ exports.up = pgm => {
         create table join_oders_items(
             id_order int REFERENCES orders (id_order) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
             id_item int REFERENCES items (id_item) ON UPDATE CASCADE  ON DELETE CASCADE NOT NULL,
+            quantity decimal(30,10) default 1,
             created_at timestamp with time zone default current_timestamp
         );
 
         create table join_oders_recipes(
             id_order int REFERENCES orders (id_order) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
             id_recipe int REFERENCES recipes (id_recipe) ON UPDATE CASCADE  ON DELETE CASCADE NOT NULL,
+            quantity decimal(30,10) default 1,
             created_at timestamp with time zone default current_timestamp
         );
 
         create table join_oders_combos(
             id_order int REFERENCES orders (id_order) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
             id_combo int REFERENCES combos (id_combo) ON UPDATE CASCADE  ON DELETE CASCADE NOT NULL,
+            quantity decimal(30,10) default 1,
             created_at timestamp with time zone default current_timestamp
         );
 

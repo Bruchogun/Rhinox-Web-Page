@@ -1,6 +1,6 @@
 
 <script>
-    import { TextInput, Button } from 'carbon-components-svelte';
+    import { TextInput, Button, NumberInput } from 'carbon-components-svelte';
 	import TrashCan16 from "carbon-icons-svelte/lib/TrashCan16";
     import Menu from './selects/Menu.svelte';
 
@@ -27,13 +27,10 @@
             ...item_recipe
         }
     })
-
+    
 </script>
 
 <style>
-    div {
-        margin-bottom: 1em;
-    }
     .OnSameLine{
         display: flex;
         justify-content: flex-start;
@@ -46,11 +43,11 @@
     
         <div class="OnSameLine">
             <div style="min-width: 10em;">
-                <Menu bind:product_to_sell={menu_item.item} />
+                <Menu bind:product_to_sell={menu_item.item}/>
             </div>
 
-            <TextInput type="number" label="Cantidad" placeholder="Cantidad..." bind:value={menu_item.quantity}/>
-        
+            <NumberInput min={1} step={1} bind:value={menu_item.quantity} />
+
             <Button kind="danger" hasIconOnly iconDescription="Borrar" icon={TrashCan16} on:click={removeUserProfitBuilder(index)}/>
         </div>
     {/each}

@@ -17,15 +17,21 @@
 		await apiFetch("/api/create_order",{
 			method: 'POST',
 			body: JSON.stringify({
-				combos_extras
+				client,
+				items,
+				description,
+				address,
+				price
 			}),
 			headers: {'Content-Type': 'application/json'}
 		})
-	}
 
-	$:console.log(client)
-	$:console.log(address)
-	$:console.log(items)
+		client = null;
+		items = [];
+		description = '';
+		address = null;
+		price = null;
+	}
 
 	function set_price(){
 		price = 0;

@@ -42,6 +42,7 @@
 		itemsToList = items.map( item => {
 			return ({
 				...item,
+				name: item.code,
 				category: 'item',
 				value: item.code, 
 				label: `${item.code} | Marca: ${item.brand_name}`,
@@ -69,6 +70,7 @@
 				id: i
 			})
 		})
+
 	}
 
 </script>
