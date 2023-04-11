@@ -84,9 +84,9 @@ exports.up = pgm => {
         create table inv_incomes(
             id_inv_income serial primary key,
             id_item int REFERENCES items (id_item) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
-            id_account int REFERENCES accounts (id_account) ON UPDATE CASCADE  ON DELETE CASCADE NOT NULL,
+            id_account int REFERENCES accounts (id_account) ON UPDATE CASCADE  ON DELETE CASCADE DEFAULT NULL,
             quantity decimal(30,10) constraint positive_quantity check (quantity >= 0) not null,
-            amount decimal(30,10) constraint positive_amount check (amount >= 0) not null,
+            amount decimal(30,10) constraint positive_amount check (amount >= 0) DEFAULT 0,
             created_at timestamp with time zone default current_timestamp
         );
 
@@ -96,8 +96,8 @@ exports.up = pgm => {
             last_name varchar(100),
             phone_number1 varchar(30),
             phone_number2 varchar(30),
-            phone_code1 varchar(10) DEFAULT '57',
-            phone_code2 varchar(10) DEFAULT '57',
+            phone_code1 varchar(10),
+            phone_code2 varchar(10),
             email varchar(100),
             description varchar(500),
             created_at timestamp with time zone default current_timestamp
@@ -203,24 +203,26 @@ exports.up = pgm => {
             description varchar(2000) not null,
             is_active boolean default TRUE,
             is_paid boolean default FALSE,
+            is_in_process boolean default FALSE,
+            is_done boolean default FALSE,
             created_at timestamp with time zone default current_timestamp
         );
 
-        create table join_oders_items(
+        create table join_orders_items(
             id_order int REFERENCES orders (id_order) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
             id_item int REFERENCES items (id_item) ON UPDATE CASCADE  ON DELETE CASCADE NOT NULL,
             quantity decimal(30,10) default 1,
             created_at timestamp with time zone default current_timestamp
         );
 
-        create table join_oders_recipes(
+        create table join_orders_recipes(
             id_order int REFERENCES orders (id_order) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
             id_recipe int REFERENCES recipes (id_recipe) ON UPDATE CASCADE  ON DELETE CASCADE NOT NULL,
             quantity decimal(30,10) default 1,
             created_at timestamp with time zone default current_timestamp
         );
 
-        create table join_oders_combos(
+        create table join_orders_combos(
             id_order int REFERENCES orders (id_order) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
             id_combo int REFERENCES combos (id_combo) ON UPDATE CASCADE  ON DELETE CASCADE NOT NULL,
             quantity decimal(30,10) default 1,
@@ -324,9 +326,9 @@ exports.down = pgm => {
         DROP TABLE IF EXISTS join_recipes_items CASCADE;
         DROP TABLE IF EXISTS join_clients_client_addresses CASCADE;
         DROP TABLE IF EXISTS orders CASCADE;
-        DROP TABLE IF EXISTS join_oders_items CASCADE;
-        DROP TABLE IF EXISTS join_oders_recipes CASCADE;
-        DROP TABLE IF EXISTS join_oders_combos CASCADE;
+        DROP TABLE IF EXISTS join_orders_items CASCADE;
+        DROP TABLE IF EXISTS join_orders_recipes CASCADE;
+        DROP TABLE IF EXISTS join_orders_combos CASCADE;
         DROP TABLE IF EXISTS join_suppliers_supplier_addresses CASCADE;
         ` 
 };

@@ -15,7 +15,7 @@ export const post = compose(
                     VALUES ( ${id_account}::integer, ${amount}::decimal, ${description}::character varying, ${id_measure}::integer, ${quantity}::decimal)
                     RETURNING id_general_expense
             )
-            SELECT alter_balance(id_balance, ${-amount}, id_general_expense, 'general_expenses')
+            SELECT alter_balance(id_balance, ${-Math.abs(amount)}, id_general_expense, 'general_expenses')
             FROM new_general_expense, balances
             WHERE id_account = ${id_account};
 

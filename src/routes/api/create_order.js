@@ -55,8 +55,8 @@ export const post = compose(
                         FROM join_clients_client_addresses
                         WHERE id_client = ${client.id_client} AND id_client_address = ${address.id_client_address}
                     RETURNING id_order
-            ), new_join_oders_items as(
-                INSERT INTO join_oders_items 
+            ), new_join_orders_items as(
+                INSERT INTO join_orders_items 
                     (id_order, id_item, quantity)
                     SELECT 
                         new_order.id_order,
@@ -64,8 +64,8 @@ export const post = compose(
                         x.quantity
                     FROM json_to_recordset(${JSON.stringify(items_fixed)}::json) as x("id_item" int, "quantity" decimal(30,10)),
                         new_order
-            ), new_join_oders_recipes as(
-                INSERT INTO join_oders_recipes 
+            ), new_join_orders_recipes as(
+                INSERT INTO join_orders_recipes 
                     (id_order, id_recipe, quantity)
                     SELECT 
                         new_order.id_order,
@@ -73,8 +73,8 @@ export const post = compose(
                         x.quantity
                     FROM json_to_recordset(${JSON.stringify(recipes_fixed)}::json) as x("id_recipe" int, "quantity" decimal(30,10)),
                         new_order
-            ), new_join_oders_combos as(
-                INSERT INTO join_oders_combos 
+            ), new_join_orders_combos as(
+                INSERT INTO join_orders_combos 
                     (id_order, id_combo, quantity)
                     SELECT 
                         new_order.id_order,

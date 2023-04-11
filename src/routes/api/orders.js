@@ -14,10 +14,10 @@ export const get = compose(
                     id_order,
                     array_agg(jsonb_build_object(
                         'name', combos.name,
-                        'quantity', join_oders_combos.quantity)
+                        'quantity', join_orders_combos.quantity)
                     ) as combos
                 FROM orders
-                    LEFT JOIN join_oders_combos USING(id_order)
+                    LEFT JOIN join_orders_combos USING(id_order)
                     LEFT JOIN combos USING(id_combo) 
                 GROUP BY id_order
             ), recipes_fixed as (
@@ -25,10 +25,10 @@ export const get = compose(
                     combos_fixed.*,
                     array_agg(jsonb_build_object(
                     'name', recipes.name,
-                    'quantity', join_oders_recipes.quantity)
+                    'quantity', join_orders_recipes.quantity)
                     ) as recipes
                 FROM combos_fixed
-                    LEFT JOIN join_oders_recipes USING(id_order)
+                    LEFT JOIN join_orders_recipes USING(id_order)
                     LEFT JOIN recipes USING(id_recipe)
                 GROUP BY id_order, combos
             ), items_fixed as (
@@ -36,10 +36,10 @@ export const get = compose(
                     recipes_fixed.*,
                     array_agg(jsonb_build_object(
                         'name', products.code,
-                        'quantity', join_oders_items.quantity)
+                        'quantity', join_orders_items.quantity)
                     ) as items
                 FROM recipes_fixed
-                    LEFT JOIN join_oders_items USING (id_order)
+                    LEFT JOIN join_orders_items USING (id_order)
                     LEFT JOIN items USING(id_item)
                     LEFT JOIN products USING(id_product) 
                 GROUP BY id_order, combos, recipes
@@ -51,6 +51,8 @@ export const get = compose(
                     orders.description as order_description,
                     orders.is_active,
                     orders.is_paid,
+                    orders.is_in_process,
+                    orders.is_done,
                     clients.name,
                     clients.last_name,
                     clients.phone_code1,

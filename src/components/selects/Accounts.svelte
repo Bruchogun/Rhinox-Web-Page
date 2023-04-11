@@ -5,6 +5,8 @@
 	import { onMount } from 'svelte';
 	import { apiFetch } from '../../functions';
 	import Select from './Select.svelte';
+	export let listPlacement;
+	export let itemHeight;
 	
 	/**
 	 * Get accounts, If needed
@@ -29,4 +31,4 @@
 
 </script>
 
-<Select placeholder="Cuentas..." bind:selected={account} items={accountsToList}/>
+<Select placeholder="Cuentas..." bind:selected={account} items={accountsToList} {listPlacement} {itemHeight}/>

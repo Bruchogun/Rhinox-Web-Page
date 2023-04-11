@@ -61,7 +61,7 @@
 	
 	<Checkbox labelText="Cambiar precio" bind:checked />
 
-	<TextArea labelText="Instrucciones" placeholder="Ingrese la descripción del gasto..." bind:value={description}/>
+	<TextArea labelText="Instrucciones" placeholder="Indicaciones adicionales..." bind:value={description}/>
 	
 	<Button type=submit >Enviar</Button>
 	
