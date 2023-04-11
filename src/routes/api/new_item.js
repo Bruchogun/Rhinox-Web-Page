@@ -7,7 +7,7 @@ export const post = compose(
     checkPermissionsMW(ROLES_CREATE),
     async (req, res) => {
         const { code, brand, id_supplier, id_measure, cost, price, min_stock, max_stock, description, manufacture, is_vendible} = req.body;
-        if(cost >= price) return res.json({error: "El costo debe ser menor que el precio de venta."})
+        if(Number(cost) >= Number(price)) return res.json({error: "El costo debe ser menor que el precio de venta."})
 
         const {rows: items} = await sql`
 
