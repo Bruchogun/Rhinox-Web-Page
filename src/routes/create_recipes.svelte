@@ -66,16 +66,16 @@
 	{#if !checked}
 		<Measures bind:measure={measure} />
 
-		<TextInput type="Number" labelText="Cantidad mínima de stock" placeholder="Ingrese el monto..." bind:value={min}/>
+		<TextInput type="Number" step={0.01} labelText="Cantidad mínima de stock" placeholder="Ingrese el monto..." bind:value={min}/>
 
-		<TextInput type="Number" labelText="Cantidad máxima de stock" placeholder="Ingrese el monto..." bind:value={max}/>
+		<TextInput type="Number" step={0.01} labelText="Cantidad máxima de stock" placeholder="Ingrese el monto..." bind:value={max}/>
 	{/if}
 	
-	<TextInput type="Number" labelText="Costo de la receta" placeholder="Costo" bind:value={recipe_cost}/>
+	<TextInput type="Number" step={0.01} labelText="Costo de la receta" placeholder="Costo" bind:value={recipe_cost}/>
 	
-	<TextInput type="Number" labelText="Precio de la receta" placeholder="Precio" bind:value={recipe_price}/>
+	<TextInput type="Number" step={0.01} labelText="Precio de la receta" placeholder="Precio" bind:value={recipe_price}/>
 	
-	<TextInput type="Number" labelText="Tiempo de preparación (minutos)" placeholder="Ingrese el tiempo" bind:value={prepare_time}/>
+	<TextInput type="Number" step={0.01} labelText="Tiempo de preparación (minutos)" placeholder="Ingrese el tiempo" bind:value={prepare_time}/>
 	
 	<TextArea labelText="Descripción" placeholder="Ingrese la descripción" bind:value={description}/>
 	

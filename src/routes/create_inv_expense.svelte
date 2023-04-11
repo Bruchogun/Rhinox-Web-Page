@@ -30,7 +30,7 @@
 
 <Items bind:item={item}/>
 
-<TextInput type="Number" labelText="Cantidad gastada" placeholder="Ingrese la cantidad gastada..." bind:value={quantity}/>
+<TextInput type="Number" step={0.01} labelText="Cantidad gastada" placeholder="Ingrese la cantidad gastada..." bind:value={quantity}/>
 
 <TextArea labelText="Descripción" placeholder="Ingrese la descripción del gasto..." bind:value={description}/>
 

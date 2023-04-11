@@ -74,9 +74,9 @@
 </style>
 
 <div class="OnSameLine">
-<TextInput type="number" labelText="Monto a cambiar" placeholder="Ingrese el monto a cambiar..." bind:value={amount_expense} />
+<TextInput type="number" step={0.01} labelText="Monto a cambiar" placeholder="Ingrese el monto a cambiar..." bind:value={amount_expense} />
 <h3 class="icons">➤</h3>
-<TextInput type="number" labelText="Monto a cambiado" placeholder="Ingrese el monto cambiado..." bind:value={amount_income} />
+<TextInput type="number" step={0.01} labelText="Monto a cambiado" placeholder="Ingrese el monto cambiado..." bind:value={amount_income} />
 </div>
 
 <div class="OnSameLine">

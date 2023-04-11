@@ -44,7 +44,7 @@
 	
 	<TextInput type="Text" labelText="Nombre del Combo" placeholder="Ingrese el nombre..." bind:value={name}/>
 	
-	<TextInput type="Number" labelText="Precio del Combo" placeholder="Ingrese precio..." bind:value={price}/>
+	<TextInput type="Number" step={0.01} labelText="Precio del Combo" placeholder="Ingrese precio..." bind:value={price}/>
 
 	<div class="OnSameLine">
 		

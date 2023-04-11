@@ -42,12 +42,12 @@
 	}
 </style>
 
-<TextInput type="Number" labelText="Monto total gastado" placeholder="Ingrese el monto total del gasto..." bind:value={amount}/>
+<TextInput type="Number" step={0.01} labelText="Monto total gastado" placeholder="Ingrese el monto total del gasto..." bind:value={amount}/>
 
 <Accounts orientation="vertical" bind:account={account}/>
 
 <div class="OnSameLine">
-	<TextInput type="Number" placeholder="Ingrese la cantidad..." bind:value={quantity}/>
+	<TextInput type="Number" step={0.01} placeholder="Ingrese la cantidad..." bind:value={quantity}/>
 	<Measures bind:measure={measure} />
 </div>
 

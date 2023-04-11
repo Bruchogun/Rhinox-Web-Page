@@ -48,7 +48,7 @@
         <Items bind:item={item_recipe.item} bind:sortByVendible/>
     
         <div class="OnSameLine">
-            <TextInput type="number" label="Cantidad" placeholder="Cantidad..." bind:value={item_recipe.quantity}/>
+            <TextInput type="number" step={0.01} label="Cantidad" placeholder="Cantidad..." bind:value={item_recipe.quantity}/>
         
             <Button kind="danger" hasIconOnly iconDescription="Borrar" icon={TrashCan16} on:click={removeUserProfitBuilder(index)}/>
         </div>

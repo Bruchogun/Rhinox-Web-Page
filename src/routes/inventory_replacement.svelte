@@ -34,10 +34,10 @@
 
 <Items bind:item={item}/>
 
-<TextInput type="Number" labelText="Cantidad repuesta" placeholder="Ingrese la cantidad repuesta..." bind:value={quantity}/>
+<TextInput type="Number" step={0.01} labelText="Cantidad repuesta" placeholder="Ingrese la cantidad repuesta..." bind:value={quantity}/>
 
 <Accounts orientation="vertical" bind:account={account}/>
 
-<TextInput type="Number" labelText="Monto total gastado" placeholder="Ingrese el monto total gastado..." bind:value={cost}/>
+<TextInput type="Number" step={0.01} labelText="Monto total gastado" placeholder="Ingrese el monto total gastado..." bind:value={cost}/>
 
 <Button on:click={repalce_inv}>Enviar</Button>

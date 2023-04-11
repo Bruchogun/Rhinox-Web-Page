@@ -57,7 +57,7 @@ import Accounts from "../components/selects/Accounts.svelte";
 	}
 </style>
 
-<TextInput type="number" labelText="Monto a transferir" placeholder="Ingrese el monto transferir..." bind:value={amount} />
+<TextInput type="number" step={0.01} labelText="Monto a transferir" placeholder="Ingrese el monto transferir..." bind:value={amount} />
 
 <div class="OnSameLine">
 	<div>

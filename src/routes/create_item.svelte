@@ -88,15 +88,15 @@
 
 	{/if}
 
-	<TextInput type="Number" labelText="Costo" placeholder="Ingrese el monto..." bind:value={cost}/>
+	<TextInput type="Number" step={0.01} labelText="Costo" placeholder="Ingrese el monto..." bind:value={cost}/>
 
-	<TextInput type="Number" labelText="Precio de Venta" placeholder="Ingrese el monto..." bind:value={price}/>
+	<TextInput type="Number" step={0.01} labelText="Precio de Venta" placeholder="Ingrese el monto..." bind:value={price}/>
 
 	{#if product && !product.id_product}
 
-		<TextInput type="Number" labelText="Cantidad mínima de stock" placeholder="Ingrese el monto..." bind:value={min}/>
+		<TextInput type="Number" step={0.01} labelText="Cantidad mínima de stock" placeholder="Ingrese el monto..." bind:value={min}/>
 
-		<TextInput type="Number" labelText="Cantidad máxima de stock" placeholder="Ingrese el monto..." bind:value={top}/>
+		<TextInput type="Number" step={0.01} labelText="Cantidad máxima de stock" placeholder="Ingrese el monto..." bind:value={top}/>
 
 		<TextArea labelText="Descripción" placeholder="Ingrese la descripción del artículo..." bind:value={description}/>
 

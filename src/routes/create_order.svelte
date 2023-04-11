@@ -57,7 +57,7 @@
 
 	<Menu_quantity label="Menú"  bind:menu={items} />
 
-	<TextInput disabled={!checked} type="Number" labelText="Precio de la orden" bind:value={price}/>
+	<TextInput disabled={!checked} type="Number" step={0.01} labelText="Precio de la orden" bind:value={price}/>
 	
 	<Checkbox labelText="Cambiar precio" bind:checked />
 
