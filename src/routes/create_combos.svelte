@@ -48,9 +48,9 @@
 
 	<div class="OnSameLine">
 		
-		<Items_quantity label="Artículos" bind:items_recipe={items_quantity} sortByVendible={true}/>
+		<Items_quantity label="Artículos" bind:items_recipe={items_quantity} sortBy={'Vendible'}/>
 		
-		<Recipes_quantity label="Recetas" bind:recipes_quantity={recipes_quantity} sortByVendible={true}/>
+		<Recipes_quantity label="Recetas" bind:recipes_quantity={recipes_quantity} sortBy={'Vendible'}/>
 	
 	</div>
 

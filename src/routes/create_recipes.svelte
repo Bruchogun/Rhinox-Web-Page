@@ -59,7 +59,7 @@
 <FluidForm on:submit={create_recipe}>
 	<TextInput labelText="Nombre" placeholder="Ingrese el nombre" bind:value={name}/>
 	
-	<Items_quantity label="Ingredientes" bind:items_recipe={items_recipe} sortByVendible={false}/>
+	<Items_quantity label="Ingredientes" bind:items_recipe={items_recipe} sortBy={'noVendible'}/>
 
 	<Checkbox labelText="Apto para venta" bind:checked />
 

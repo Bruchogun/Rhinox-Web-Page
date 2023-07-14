@@ -162,7 +162,7 @@ export const post = compose(
         ;
 
         res.json( {
-            orders,
+            data: orders,
             success:`Orden creada exitosamente.` 
         });
     }

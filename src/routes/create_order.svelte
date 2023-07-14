@@ -12,6 +12,7 @@
 	let address;
 	let checked = false;
 	let price;
+	let stocks;
 
 	async function create_order(){
 		await apiFetch("/api/create_order",{
@@ -26,6 +27,7 @@
 			headers: {'Content-Type': 'application/json'}
 		})
 
+		console.log(orders)
 		client = null;
 		items = [];
 		description = '';
@@ -42,9 +44,16 @@
 		});
 	}
 
+	async function check_stocks(){
+		({stocks} = await apiFetch('/api/recip_stocks'));
+	}
+
 	$:if(items){
 		set_price()
+		console.log(items)
 	}
+
+
 </script>
 
 <FluidForm on:submit={create_order}>

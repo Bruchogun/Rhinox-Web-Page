@@ -13,12 +13,18 @@ export const post = compose(
                     UPDATE items
                     SET quantity = quantity + ${quantity}
                     WHERE id_item = ${id_item}
-                )
+                ), new_inv_income as (
                     INSERT INTO public.inv_incomes
                         ( id_item, id_account, quantity, amount )
                         VALUES (${id_item}::integer, ${id_account}::integer, ${quantity}::numeric, ${cost}::numeric)
                         RETURNING id_inv_income
-
+                )
+                SELECT alter_balance( --Maldita sea, puto alter_balance siempre de ultimo en los WITHS!!!!!! 
+                    ${id_account}::integer,
+                    ${-Math.abs(cost)}::numeric,
+                    id_inv_income,
+                    'inv_incomes'
+                ) FROM new_inv_income;
             `;
     
         res.json({

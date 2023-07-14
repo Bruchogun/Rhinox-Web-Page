@@ -11,7 +11,7 @@
 
     export let recipes_quantity = [ {...NEW_RECIPE} ];
     export let label;
-    export let sortByVendible = false;
+    export let sortBy = 'default';
 
     function addRecipeQuantity() {
         recipes_quantity = [ ...recipes_quantity, {...NEW_RECIPE} ]
@@ -45,7 +45,7 @@
     <h4>{label}</h4>
     {#each recipes_quantity as recipe_quantity, index}
     
-        <Recipes bind:recipe={recipe_quantity.recipe} bind:sortByVendible/>
+        <Recipes bind:recipe={recipe_quantity.recipe} bind:sortBy/>
     
         <div class="OnSameLine">
             <TextInput type="number" step={0.01} label="Cantidad" placeholder="Cantidad..." bind:value={recipe_quantity.quantity}/>

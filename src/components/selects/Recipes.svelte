@@ -1,7 +1,7 @@
 <script>
 
 	export let recipe;
-	export let sortByVendible = false;
+	export let sortBy = 'default';
 	/** @type {"vertical" | "horizontal"}*/
 	import { onMount } from 'svelte';
 	import { apiFetch } from '../../functions';
@@ -18,7 +18,7 @@
 	
 	let recipesToList= [];
 	$: if (recipes) {
-		if(sortByVendible){
+		if(sortBy === 'Vendible'){
 			recipesToList = recipes.map( recipe => {
 					return ({...recipe,
 							value: recipe.id_recipe, 
@@ -26,7 +26,15 @@
 							id: recipe.id_recipe })
 			})
 			recipesToList = recipesToList.filter( recipe => recipe.is_vendible)
-		}else{
+		}else if(sortBy === 'noVendible'){
+			recipesToList = recipes.map( recipe => {
+					return ({...recipe,
+							value: recipe.id_recipe, 
+							label: `${recipe.name}`,
+							id: recipe.id_recipe })
+			})
+			recipesToList = recipesToList.filter( recipe => !recipe.is_vendible)
+		}else if(sortBy === 'default'){
 			recipesToList = recipes.map( recipe => {
 					return ({...recipe,
 							value: recipe.id_recipe, 
